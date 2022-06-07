@@ -14,6 +14,8 @@ class Account extends ActiveRecord implements \yii\web\IdentityInterface
 
     /**
      * Get the table name in database
+     * 
+     * 
      */
     public static function tableName() {
         return 'account';
