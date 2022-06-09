@@ -90,10 +90,10 @@ class RegisterForm extends Model
       $accountData = $this->setAccountDataInArray();
       $roleTableData = $this->setRoleTableDataInArray();
 
-      $_registerHandler = RoleCreator::getInstance($this->type, $this->email);
-      if ($_registerHandler) {
-        return $_registerHandler->insertInAccount($accountData) 
-          && $_registerHandler->insertInRoleTable($roleTableData);
+      $_roleHandler = RoleCreator::getInstance($this->type);
+      if ($_roleHandler) {
+        return $_roleHandler->insertInAccount($accountData) 
+          && $_roleHandler->insertInRoleTable($roleTableData);
       }
       return false;
 

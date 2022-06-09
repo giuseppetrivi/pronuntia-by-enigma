@@ -9,8 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\RegisterForm;
-use app\models\ContactForm;
-use app\models\Account;
+use app\models\role_factory_method\RoleCreator;
 
 class SiteController extends Controller
 {
@@ -73,13 +72,21 @@ class SiteController extends Controller
      */
     public function actionLogin() {
 
+        $type = !Yii::$app->user->isGuest ? Yii::$app->user->identity->tipo : null;
+        $homePage = 'site/index';
+
+        $_roleHandler = RoleCreator::getInstance($type);
+        if ($_roleHandler) {
+            $homePage = $_roleHandler->getRoleHomePage();
+        }
+
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->redirect([$homePage]);
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->redirect([$homePage]);
         }
 
         $model->password = ''; //security
@@ -95,7 +102,7 @@ class SiteController extends Controller
      */
     public function actionLogout() {
         Yii::$app->user->logout();
-        return $this->goHome();
+        return $this->redirect(['site/index']);
     }
 
 

@@ -44,6 +44,8 @@ abstract class RoleProductInterface {
 
   abstract public function getEntityInstance($email);
 
+  abstract public function getRoleHomePage();
+
 }
 
 ?>

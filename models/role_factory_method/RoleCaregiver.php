@@ -12,6 +12,10 @@ class RoleCaregiver extends RoleProductInterface {
   public function getEntityInstance($email) {
     return new Caregiver($email);    
   }
+
+  public function getRoleHomePage() {
+    return 'site/index';    
+  }
 }
 
 ?>

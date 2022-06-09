@@ -11,7 +11,11 @@ class RoleLogopedista extends RoleProductInterface {
 
 
   public function getEntityInstance($email) {
-      return new Logopedista($email);
+      return Logopedista::findIdentity($email);
+  }
+
+  public function getRoleHomePage() {
+    return 'site/index';    
   }
 
 }

@@ -25,14 +25,18 @@ abstract class RoleCreator {
         case 'CAR':
           self::$instance = new RoleCaregiver();
           break;
+        case 'MOD':
+          self::$instance = new RoleModeratore();
+          break;
 
         default:
-          throw new Exception("Errore nell'etichetta del linguaggio");
+          //throw new Exception("Errore nell'etichetta del linguaggio");
+          return false;
           break;
       }
       return self::$instance;
     }
-    throw new Exception('Errore nei dati passati');
+    //throw new Exception('Errore nei dati passati');
   }
 
 
