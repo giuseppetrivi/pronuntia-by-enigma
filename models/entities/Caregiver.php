@@ -2,17 +2,27 @@
 
 namespace app\models\entities;
 
-class Caregiver extends User {
+use Yii;
+use yii\db\ActiveRecord;
 
-  protected $tableName = 'caregiver';
+class Caregiver extends ActiveRecord {
 
-  public function getAllPersonalInfo() {
-    
+  private static $tableName = 'caregiver';
+
+  public static function tableName() {
+    return '{{'.self::$tableName.'}}';
   }
 
-  protected function setAllPersonalInfo() {
 
+  /**
+   * {@inheritdoc}
+   */
+  public static function findIdentity($id) {
+    return static::findOne(['account_email' => $id]);
   }
+
+
+
 
 }
 

@@ -7,9 +7,17 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
+use app\models\ActionRulesHandler;
+use app\models\role_factory_method\RoleCreator;
+use Exception;
+
 
 class ModeratoreController extends Controller
 {
+    public $defaultAction = 'logopedisti-list';
+    private $controllerRole = 'MOD';
+
+
     /**
      * {@inheritdoc}
      */
@@ -58,7 +66,9 @@ class ModeratoreController extends Controller
      * @return string
      */
     public function actionLogopedistiList() {
-      return $this->render('logopedisti-list');
+        $_moderatore = $this->getEntityInstance();
+        $logopedisti_list = $_moderatore->getLogopedistiToConfirm();
+        return $this->render('logopedisti-list', ['logopedisti_list' => $logopedisti_list]);
     }
 
 
@@ -75,23 +85,74 @@ class ModeratoreController extends Controller
 
 
     /**
+     * 
+     */
+    public function actionConfirmLogopedista($id) {
+
+    }
+    /**
+     * 
+     */
+    public function actionRejectLogopedista($id) {
+
+    }
+    /**
+     * 
+     */
+    public function actionDenyLogopedista($id) {
+
+    }
+
+
+
+    /**
+     * Displays logopedista infos.
+     *
+     * @return string
+     */
+    public function actionAccount() {
+        //restituisce una pagina con tutte le info del moderatore
+        $_moderatore = $this->getEntityInstance();
+        return $this->render('account', ['_moderatore' => $_moderatore]);
+      }
+
+
+
+    /**
+     * Get the entity instance based on the role, after check that user exists
+     * 
+     * @return RoleProductInterface
+     * @throws Exception
+     */
+    private function getEntityInstance() {
+        $_roleHandler = RoleCreator::getInstance(Yii::$app->user->identity->tipo);
+        if (!$_roleHandler) {
+            throw new Exception("Error in the role handler");
+        }
+        $_entityInstance = $_roleHandler->getEntityInstance(Yii::$app->user->identity->email);
+        return $_entityInstance;
+    }
+
+
+    /**
      * {@inheritdoc}
      */
     public function beforeAction($action) {
-
-        //return false;
-        $type = !Yii::$app->user->isGuest ? Yii::$app->user->identity->tipo : null;
-        /*if ($type==$this->permissionType) {
-            //codice
-        }*/
-    
+        /* code for overriding */
         if (!parent::beforeAction($action)) {
             return false;
         }
-    
-        // other custom code here
-    
-        return true; // or false to not run the action
+
+        /* code to check the role */
+        $result = ActionRulesHandler::checkControllerRule($this->controllerRole);
+        $resultType = gettype($result);
+
+        if ($resultType=='string'){
+            $this->redirect([$result]);
+            $result = true;
+        }
+
+        return $result;
     }
 
 }

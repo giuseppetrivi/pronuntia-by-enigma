@@ -10,6 +10,8 @@ use yii\bootstrap4\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 
+use app\views\layouts\NavBarOptionsHandler;
+
 AppAsset::register($this);
 
 $this->title = 'Pronuntia - Home';
@@ -28,6 +30,7 @@ $this->title = 'Pronuntia - Home';
 <?php $this->beginBody() ?>
 
 <header>
+
     <?php
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
@@ -36,28 +39,9 @@ $this->title = 'Pronuntia - Home';
             'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
         ],
     ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav'],
-        'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->email . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            ),
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Registrati', 'url' => ['/site/register']]
-            ) : ('')
-        ],
-    ]);
+    
+    echo NavBarOptionsHandler::chooseNavBar();
+
     NavBar::end();
     ?>
 </header>

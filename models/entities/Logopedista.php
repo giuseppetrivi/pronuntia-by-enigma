@@ -21,12 +21,6 @@ class Logopedista extends ActiveRecord {
     return static::findOne(['account_email' => $id]);
   }
 
-  public function getNome() {
-    return $this->nome;
-  }
-
-
-
 
 
 

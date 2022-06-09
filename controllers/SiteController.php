@@ -9,14 +9,19 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\RegisterForm;
+use app\models\ActionRulesHandler;
 use app\models\role_factory_method\RoleCreator;
 
 class SiteController extends Controller
 {
+    public $defaultAction = 'index';
+    private $controllerRole = '*';
+
+
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    public function behaviors() //si potrebbe togliere
     {
         return [
             'access' => [
@@ -72,13 +77,7 @@ class SiteController extends Controller
      */
     public function actionLogin() {
 
-        $type = !Yii::$app->user->isGuest ? Yii::$app->user->identity->tipo : null;
-        $homePage = 'site/index';
-
-        $_roleHandler = RoleCreator::getInstance($type);
-        if ($_roleHandler) {
-            $homePage = $_roleHandler->getRoleHomePage();
-        }
+        $homePage = $this->getHomePage();
 
         if (!Yii::$app->user->isGuest) {
             return $this->redirect([$homePage]);
@@ -86,6 +85,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            $homePage = $this->getHomePage();
             return $this->redirect([$homePage]);
         }
 
@@ -93,6 +93,21 @@ class SiteController extends Controller
         return $this->render('login', [
             'model' => $model
         ]);
+    }
+
+    /**
+     * Check the if the user is logged and return the right home page
+     * 
+     * @return string
+     */
+    private function getHomePage() {
+        $type = !Yii::$app->user->isGuest ? Yii::$app->user->identity->tipo : null;
+        $homePage = 'site/index';
+        $_roleHandler = RoleCreator::getInstance($type);
+        if ($_roleHandler) {
+            $homePage = $_roleHandler->getRoleHomePage();
+        }
+        return $homePage;
     }
 
     /**
@@ -142,6 +157,29 @@ class SiteController extends Controller
         }
 
         return $this->render('register', ['model' => $model]);
+    }
+
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function beforeAction($action) {
+        /* code for overriding */
+        if (!parent::beforeAction($action)) {
+            return false;
+        }
+
+        /* code to check the role */
+        $result = ActionRulesHandler::checkControllerRule($this->controllerRole);
+        $resultType = gettype($result);
+
+        if ($resultType=='string'){
+            $this->redirect([$result]);
+            $result = true;
+        }
+
+        return $result;
     }
 
 }
