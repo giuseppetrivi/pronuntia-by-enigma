@@ -62,7 +62,6 @@ class NavBarOptionsHandler {
       'options' => ['class' => 'navbar-nav'],
       'items' => [
           ['label' => 'Lista logopedisti', 'url' => ['/moderatore/logopedisti-list']],
-          ['label' => 'Account', 'url' => ['/moderatore/account']],
           (
             '<li>'
             . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])

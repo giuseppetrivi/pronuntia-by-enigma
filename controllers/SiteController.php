@@ -7,10 +7,15 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
+
 use app\models\LoginForm;
-use app\models\RegisterForm;
+
+use app\models\RegisterLogopedistaForm;
+use app\models\RegisterCaregiverForm;
+
 use app\models\ActionRulesHandler;
 use app\models\role_factory_method\RoleCreator;
+
 
 class SiteController extends Controller
 {
@@ -136,13 +141,25 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionRegister() {
+    public function actionRegister($type='LOG') {
 
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
-        $model = new RegisterForm();
+        $model = new RegisterLogopedistaForm();
+        switch ($type) {
+            case 'LOG':
+                $model = new RegisterLogopedistaForm();
+                break;
+            case 'CAR': 
+                $model = new RegisterCaregiverForm();
+                break;
+            default: 
+                //return $this->redirect(['site/index']);
+                break;
+        }
+
         if ($model->load(Yii::$app->request->post())) {
             if ($model->register()) {
                 $success_message = 'Registrazione avvenuta con successo. Effettua il login per entrare';

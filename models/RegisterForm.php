@@ -6,19 +6,17 @@ use Yii;
 use yii\base\Model;
 use app\models\role_factory_method\RoleCreator;
 
+
 /**
- * RegisterForm is the model behind the register form.
- *
- * @property-read User|null $user
- *
+ * 
  */
-class RegisterForm extends Model
+abstract class RegisterForm extends Model
 {
     private $id = null;
 
     public $email;
     public $password;
-    public $type = 'LOG';
+    public $type;
     public $firstname;
     public $lastname;
     public $date_birth;
@@ -104,7 +102,7 @@ class RegisterForm extends Model
     /**
      * Create an array with the account data
      */
-    private function setAccountDataInArray() {
+    protected function setAccountDataInArray() {
       return [
         'email' => $this->email,
         'password' => $this->getHashedPassword(),
@@ -115,7 +113,7 @@ class RegisterForm extends Model
     /**
      * Create an array with the additional info data
      */
-    private function setRoleTableDataInArray() {
+    protected function setRoleTableDataInArray() {
       return [
         'id' => $this->getRoleTableId(),
         'email' => $this->email,
@@ -124,10 +122,12 @@ class RegisterForm extends Model
         'data_nascita' => $this->date_birth,
       ];
     }
+
+
     /**
      * Get (and set if null) the role table id
      */
-    private function getRoleTableId() {
+    protected function getRoleTableId() {
       if ($this->id == null) {
         $this->id = Yii::$app->security->generatePasswordHash($this->email);
       }
@@ -138,7 +138,7 @@ class RegisterForm extends Model
     /**
      * Make a secure password by hashing the raw password
      */
-    private function getHashedPassword() {
+    protected function getHashedPassword() {
       $hashedPassword = Yii::$app->security->generatePasswordHash($this->password);
       $this->password = '';
       return $hashedPassword;
@@ -147,7 +147,7 @@ class RegisterForm extends Model
     /**
      * Generate a string for the authentication
      */
-    private function generateAuthKey() {
+    protected function generateAuthKey() {
       return Yii::$app->security->generateRandomString();
     }
 }

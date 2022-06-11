@@ -45,10 +45,10 @@ class Moderatore extends ActiveRecord {
    */
   public function getLogopedistaInfoById($id) {
     $query = "SELECT * FROM logopedisti "
-      . "WHERE id=:id_log LIMIT 1";
+      . "WHERE id=:idLog LIMIT 1";
     
     $logopedistaInfo = Yii::$app->db->createCommand($query)
-      ->bindParam(':id_log', $id)
+      ->bindParam(':idLog', $id)
       ->queryOne();
     
     return $logopedistaInfo;
