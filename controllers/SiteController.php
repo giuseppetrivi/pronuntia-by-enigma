@@ -10,8 +10,8 @@ use yii\filters\VerbFilter;
 
 use app\models\LoginForm;
 
-use app\models\RegisterLogopedistaForm;
-use app\models\RegisterCaregiverForm;
+use app\models\registerform_hierarchy\RegisterLogopedistaForm;
+use app\models\registerform_hierarchy\RegisterCaregiverForm;
 
 use app\models\ActionRulesHandler;
 use app\models\role_factory_method\RoleCreator;
@@ -65,6 +65,7 @@ class SiteController extends Controller
         ];
     }
 
+
     /**
      * Displays homepage.
      *
@@ -115,6 +116,7 @@ class SiteController extends Controller
         return $homePage;
     }
 
+
     /**
      * Logout action.
      *
@@ -143,8 +145,10 @@ class SiteController extends Controller
      */
     public function actionRegister($type='LOG') {
 
+        $homePage = $this->getHomePage();
+
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->redirect([$homePage]);
         }
 
         $model = new RegisterLogopedistaForm();
@@ -166,11 +170,11 @@ class SiteController extends Controller
                 Yii::$app->session->setFlash('success', $success_message);
                 return $this->redirect(['site/login']);
             }
-            else {
+            /*else {
                 $error_message = 'Qualcosa è andato storto nella registrazione. Riprova';
                 Yii::$app->session->setFlash('error', $error_message);
                 return $this->redirect(['site/register']);
-            }
+            }*/
         }
 
         return $this->render('register', ['model' => $model]);

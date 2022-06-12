@@ -55,8 +55,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
           <div class="col-lg-12 mb-4">
             <?php 
-              echo Html::beginForm(['/moderatore/accept-logopedista'], 'post');
-              //echo Html::input('hidden');
+              echo Html::beginForm(['moderatore/accept-logopedista'], 'post');
+              echo Html::input('hidden', 'id', $logopedista_info['id']);
               echo Html::submitButton('Accetta registrazione', ['class' => 'btn btn-success']);
               echo Html::endForm(); 
             ?>
@@ -64,10 +64,12 @@ $this->params['breadcrumbs'][] = $this->title;
           <div class="col-lg-12 mb-4">
             <?php 
               echo Html::beginForm(['/moderatore/reject-logopedista'], 'post');
-              echo Html::activeTextarea($model, 'motivo', [
+              echo Html::input('hidden', 'id', $logopedista_info['id']);
+              echo Html::textarea('motivo', '', [
                 'rows' => '5', 
                 'placeholder' => 'Motivo',
-                'class' => 'form-control mb-3'
+                'class' => 'form-control mb-3',
+                'required' => 'true'
               ]);
               echo Html::submitButton('Respingi registrazione', ['class' => 'btn btn-light']);
               echo Html::endForm();
@@ -76,6 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
           <div class="col-lg-12 mb-4">
             <?php 
               echo Html::beginForm(['/moderatore/deny-logopedista'], 'post');
+              echo Html::input('hidden', 'id', $logopedista_info['id']);
               echo Html::submitButton('Rifiuta registrazione', ['class' => 'btn btn-danger']);
               echo Html::endForm();
             ?>
@@ -84,6 +87,36 @@ $this->params['breadcrumbs'][] = $this->title;
       </div>
     </div>
   </div>
+
+  <br>
+  <br>
+
+  <?php
+  if (count($rejection_info)>0):
+  ?>
+
+    <h5>Richieste respinte</h5>
+    <br>
+    <div class="list-group w-auto" style="word-break: break-all; margin-bottom:50px;">
+      <div class="row">
+        <div class="col-lg-9">
+          <?php 
+
+            foreach ($rejection_info as $value) {
+              echo ListGroupLogopedistaInfo::widget([
+                'field_name' => DateHandler::getLiteralDate($value['data']),
+                'content' => $value['motivo']
+              ]);
+            }
+
+          ?>
+        </div>
+      </div>
+    </div>
+
+  <?php
+  endif
+  ?>
 
 
 </div>

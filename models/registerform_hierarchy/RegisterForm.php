@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\models\registerform_hierarchy;
 
 use Yii;
 use yii\base\Model;
@@ -53,6 +53,7 @@ abstract class RegisterForm extends Model
             //format and check email
             ['email', 'trim'],
             ['email', 'email', 'message' => '{attribute} non valido'],
+            ['email', 'validateEmail', 'skipOnEmpty' => false, 'skipOnError' => false],
             // password is validated by validatePassword()
             [
               'password', 
@@ -73,10 +74,30 @@ abstract class RegisterForm extends Model
               'date', 
               'format' => 'php:Y-m-d',
               'message' => 'Formato non valido'
-            ]
+            ],
         ];
     }
 
+
+    /**
+     * Validates the email.
+     * This method serves as the inline validation for email.
+     *
+     * @param string $attribute the attribute currently being validated
+     * @param array $params the additional name-value pairs given in the rule
+     */
+    public function validateEmail($attribute, $params)
+    {
+      if (!$this->hasErrors()) {
+        $results = Yii::$app->db->createCommand("SELECT email FROM account WHERE email=:email")
+          ->bindParam(':email', $this->email)
+          ->queryAll();
+
+        if (count($results)>0) {
+          $this->addError($attribute, 'Indirizzo email già registrato.');
+        }
+      }
+    }
 
 
     /**
@@ -84,17 +105,17 @@ abstract class RegisterForm extends Model
      * @return bool whether the user is registered in successfully
      */
     public function register() {
-
-      $accountData = $this->setAccountDataInArray();
-      $roleTableData = $this->setRoleTableDataInArray();
-
-      $_roleHandler = RoleCreator::getInstance($this->type);
-      if ($_roleHandler) {
-        return $_roleHandler->insertInAccount($accountData) 
-          && $_roleHandler->insertInRoleTable($roleTableData);
+      if ($this->validate()) {
+        $accountData = $this->setAccountDataInArray();
+        $roleTableData = $this->setRoleTableDataInArray();
+  
+        $_roleHandler = RoleCreator::getInstance($this->type);
+        if ($_roleHandler) {
+          return $_roleHandler->insertInAccount($accountData) 
+            && $_roleHandler->insertInRoleTable($roleTableData);
+        }
+        return false;
       }
-      return false;
-
     }
 
 

@@ -7,7 +7,8 @@ use app\models\role_factory_method\RoleCreator;
 
 
 /**
- * Class to check the controller rule
+ * Class to check the controller rule, if has the permission for 
+ * the controller class actions
  */
 class ActionRulesHandler {
 

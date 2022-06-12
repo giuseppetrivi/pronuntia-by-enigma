@@ -18,49 +18,6 @@ class ModeratoreController extends Controller
     public $defaultAction = 'logopedisti-list';
     private $controllerRole = 'MOD';
 
-
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
-
-    /**SI POTREBBE ANCHE TOGLIERE
-     * {@inheritdoc}
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
-        ];
-    }
-
     /**
      * Displays logopedisti list.
      *
@@ -74,7 +31,7 @@ class ModeratoreController extends Controller
 
 
     /**
-     * Displays logopedista infos.
+     * Displays logopedista infos, to choose if is acceptable or not.
      *
      * @return string
      */
@@ -87,47 +44,63 @@ class ModeratoreController extends Controller
             Yii::$app->session->setFlash('error', $error_message);
             return $this->redirect(['moderatore/logopedisti-list']);
         }
+        
+        $rejection_info = $_moderatore->getRejectionInfoByLogopedistaId($id);
 
-        //ricerca e restituzione logopedista by id
-        //informazioni anche sui reject subiti
         return $this->render('logopedista-info', [
             'model' => new InfoLogopedistaToCheckForm(),
-            'logopedista_info' => $logopedista_info
-        ]); //con parametro
+            'logopedista_info' => $logopedista_info,
+            'rejection_info' => $rejection_info
+        ]);
     }
 
 
     /**
-     * 
+     * Confirm the registration of the logopedista
      */
-    public function actionAcceptLogopedista($id) {
-
+    public function actionAcceptLogopedista() {
+        $arrayRequests = Yii::$app->request->post();
+        if (array_key_exists('id', $arrayRequests)) {
+            $idLogopedista = $arrayRequests['id'];
+            $_moderatore = $this->getEntityInstance();
+            $_moderatore->acceptLogopedista($idLogopedista); //da controllare
+            return $this->redirect(['moderatore/logopedisti-list']);            
+        }
     }
     /**
-     * 
+     * Reject the registration of the logopedista
      */
-    public function actionRejectLogopedista($id) {
-
+    public function actionRejectLogopedista() {
+        $arrayRequests = Yii::$app->request->post();
+        if (array_key_exists('id', $arrayRequests)) {
+            $idLogopedista = $arrayRequests['id'];
+            if (array_key_exists('motivo', $arrayRequests)) {
+                $motivo = $arrayRequests['motivo'];
+                if ($motivo=='') {
+                    $error_message = 'Il campo della motivazione deve essere compilato!! Riprova';
+                    Yii::$app->session->setFlash('error', $error_message);
+                    return $this->redirect(['moderatore/logopedista-info?id=' . $idLogopedista]);
+                }
+                else {
+                    $_moderatore = $this->getEntityInstance();
+                    $_moderatore->rejectLogopedista($idLogopedista, $motivo);
+                    return $this->redirect(['moderatore/logopedisti-list']);  
+                }
+            }          
+        }
     }
     /**
-     * 
+     * Refuse the registration of the logopedista
      */
-    public function actionDenyLogopedista($id) {
-
+    public function actionDenyLogopedista() {
+        $arrayRequests = Yii::$app->request->post();
+        if (array_key_exists('id', $arrayRequests)) {
+            $idLogopedista = $arrayRequests['id'];
+            $_moderatore = $this->getEntityInstance();
+            $_moderatore->denyLogopedista($idLogopedista); //da controllare
+            return $this->redirect(['moderatore/logopedisti-list']);              
+        }
     }
-
-
-
-    /**
-     * Displays logopedista infos.
-     *
-     * @return string
-     */
-    public function actionAccount() {
-        //restituisce una pagina con tutte le info del moderatore
-        $_moderatore = $this->getEntityInstance();
-        return $this->render('account', ['_moderatore' => $_moderatore]);
-      }
 
 
 
