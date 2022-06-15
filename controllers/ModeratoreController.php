@@ -3,12 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
-use yii\web\Response;
-use yii\filters\VerbFilter;
-use app\models\ActionRulesHandler;
-use app\models\InfoLogopedistaToCheckForm;
+use app\controllers\ActionRulesHandler;
 use app\models\role_factory_method\RoleCreator;
 use Exception;
 
@@ -44,11 +40,9 @@ class ModeratoreController extends Controller
             Yii::$app->session->setFlash('error', $error_message);
             return $this->redirect(['moderatore/logopedisti-list']);
         }
-        
         $rejection_info = $_moderatore->getRejectionInfoByLogopedistaId($id);
 
         return $this->render('logopedista-info', [
-            'model' => new InfoLogopedistaToCheckForm(),
             'logopedista_info' => $logopedista_info,
             'rejection_info' => $rejection_info
         ]);

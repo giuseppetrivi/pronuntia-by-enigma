@@ -13,7 +13,7 @@ use app\models\LoginForm;
 use app\models\registerform_hierarchy\RegisterLogopedistaForm;
 use app\models\registerform_hierarchy\RegisterCaregiverForm;
 
-use app\models\ActionRulesHandler;
+use app\controllers\ActionRulesHandler;
 use app\models\role_factory_method\RoleCreator;
 
 
@@ -151,6 +151,7 @@ class SiteController extends Controller
             return $this->redirect([$homePage]);
         }
 
+        //si potrebbe nascondere con un factory method apposito
         $model = new RegisterLogopedistaForm();
         switch ($type) {
             case 'LOG':
