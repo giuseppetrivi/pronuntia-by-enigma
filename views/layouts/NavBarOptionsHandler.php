@@ -19,7 +19,7 @@ class NavBarOptionsHandler {
         return NavBarOptionsHandler::defaultNavBar();
         break;
       case 'CAR':
-        return NavBarOptionsHandler::defaultNavBar();
+        return NavBarOptionsHandler::caregiverNavBar();
         break;
       case 'MOD':
         return NavBarOptionsHandler::moderatoreNavBar();
@@ -62,6 +62,28 @@ class NavBarOptionsHandler {
       'options' => ['class' => 'navbar-nav'],
       'items' => [
           ['label' => 'Lista logopedisti', 'url' => ['/moderatore/logopedisti-list']],
+          (
+            '<li>'
+            . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
+            . Html::submitButton(
+                'Logout (' . Yii::$app->user->identity->email . ')',
+                ['class' => 'btn btn-link logout']
+            )
+            . Html::endForm()
+            . '</li>'
+          )
+      ],
+    ]);
+  }
+
+  private static function caregiverNavBar() {
+    return Nav::widget([
+      'options' => ['class' => 'navbar-nav'],
+      'items' => [
+          ['label' => 'XXXX', 'url' => ['/site/index']],
+          ['label' => 'XXXX', 'url' => ['/site/index']],
+          ['label' => 'XXXX', 'url' => ['/site/index']],
+          ['label' => 'Account', 'url' => ['/caregiver/account']],
           (
             '<li>'
             . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])

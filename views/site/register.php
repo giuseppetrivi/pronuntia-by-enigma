@@ -6,7 +6,6 @@
 
 use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
-use yii\jui\DatePicker;
 
 $this->title = 'Registrati';
 $this->params['breadcrumbs'][] = $this->title;

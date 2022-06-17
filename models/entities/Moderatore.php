@@ -23,14 +23,6 @@ class Moderatore extends ActiveRecord {
 
 
   /**
-   * Getter class for attribute $cod_dipendente
-   */
-  public function getCodDipendente() {
-    return $this->cod_dipendente;
-  }
-
-
-  /**
    * Get some info about logopedisti to confirm registration
    * 
    * @return array
@@ -69,7 +61,7 @@ class Moderatore extends ActiveRecord {
    * @return array
    */
   public function getRejectionInfoByLogopedistaId($id) {
-    $cod_dipendente = $this->getCodDipendente();
+    $cod_dipendente = $this->__get('cod_dipendente');
     $query = "SELECT * FROM logopedistirespinti 
       WHERE moderatore_cod_dipendente=:codDipendente AND logopedista_id=:idLog 
       ORDER BY data DESC";
@@ -97,7 +89,7 @@ class Moderatore extends ActiveRecord {
    * Reject the registration of the logopedista
    */
   public function rejectLogopedista($idLogopedista, $motivo) {
-    $cod_dipendente = $this->getCodDipendente();
+    $cod_dipendente = $this->__get('cod_dipendente');
     $query = "INSERT INTO logopedistirespinti (motivo, moderatore_cod_dipendente, logopedista_id)
       VALUES ( :motivo , :cod_dipendente , :idLog )";
     return Yii::$app->db->createCommand($query)

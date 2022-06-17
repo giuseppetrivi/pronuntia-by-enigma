@@ -10,7 +10,7 @@ class RoleCaregiver extends RoleProductInterface {
   protected $roleTableName = 'caregiver';
 
   public function getEntityInstance($email) {
-    return new Caregiver($email);    
+    return Caregiver::findIdentity($email);    
   }
 
   public function getRoleHomePage() {
