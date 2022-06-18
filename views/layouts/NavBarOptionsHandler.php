@@ -81,8 +81,8 @@ class NavBarOptionsHandler {
       'options' => ['class' => 'navbar-nav'],
       'items' => [
           ['label' => 'XXXX', 'url' => ['/site/index']],
-          ['label' => 'XXXX', 'url' => ['/site/index']],
-          ['label' => 'XXXX', 'url' => ['/site/index']],
+          ['label' => 'Logopedisti', 'url' => ['/caregiver/logopedisti']],
+          ['label' => 'Utenti', 'url' => ['/caregiver/utenti']],
           ['label' => 'Account', 'url' => ['/caregiver/account']],
           (
             '<li>'

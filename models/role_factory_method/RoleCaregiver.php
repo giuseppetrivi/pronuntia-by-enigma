@@ -14,7 +14,7 @@ class RoleCaregiver extends RoleProductInterface {
   }
 
   public function getRoleHomePage() {
-    return 'site/index';    
+    return 'caregiver/account';    
   }
 }
 
