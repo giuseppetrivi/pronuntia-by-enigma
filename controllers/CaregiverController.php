@@ -8,9 +8,12 @@ use app\controllers\ActionRulesHandler;
 
 use app\models\modifyaccountform\ModifyCaregiverForm;
 use app\models\UtenteForm;
+use app\models\ContactForm;
 
 use app\models\role_factory_method\RoleCreator;
 use Exception;
+
+use app\models\entities\Logopedista;
 
 
 class CaregiverController extends Controller
@@ -160,8 +163,77 @@ class CaregiverController extends Controller
 
 
     /**
-     * 
+     * Show all saved logopedisti
      */
+    public function actionLogopedisti() {
+      $_caregiver = $this->getEntityInstance();
+      $logopedisti_salvati = Logopedista::getAllLogopedistiSalvati($_caregiver->__get('id'));
+      return $this->render('logopedisti-salvati', [
+        'logopedisti_salvati' => $logopedisti_salvati
+      ]);
+    }
+
+    /**
+     * Search logopedisti
+     */
+    public function actionSearchLogopedisti() {
+      $logopedisti_trovati = null;
+      $searchkey = '';
+
+      $array_requests = Yii::$app->request->post();
+      if (array_key_exists('search', $array_requests)) {
+        $searchkey = $array_requests['search'];
+        $logopedisti_trovati = Logopedista::findAllLogopedisti($searchkey);
+      }
+      return $this->render('search-logopedisti', [
+        'logopedisti_trovati' => $logopedisti_trovati,
+        'searchkey' => $searchkey
+      ]);
+    }
+
+    /**
+     * Save/unsave the logopedista for the caregiver
+     */
+    public function actionSaveLogopedista() {
+      $_caregiver = $this->getEntityInstance();
+      $array_requests = Yii::$app->request->post();
+      if (array_key_exists('idLogopedista', $array_requests) && array_key_exists('saved', $array_requests)) {
+        $idLogopedista = $array_requests['idLogopedista'];
+        $saved = $array_requests['saved'];
+
+        $save_success = $saved==1 ? 
+          $_caregiver->removeLogopedistaSalvato($idLogopedista) :
+          $_caregiver->addLogopedistaSalvato($idLogopedista);
+
+        if (!$save_success) {
+          $error_message = 'Qualcosa è andato storto. Riprova';
+          Yii::$app->session->setFlash('error', $error_message);
+        }
+      }
+      return $this->redirect(['caregiver/logopedisti']);
+    }
+
+
+    /**
+     * Show the contacts and the form to start contacts
+     */
+    public function actionContact() {
+      $_caregiver = $this->getEntityInstance();
+      $model = new ContactForm($_caregiver);
+      if ($model->load(Yii::$app->request->post())) {
+        if ($model->sendMessaggio()) {
+          return $this->redirect(['caregiver/contact']);
+        }
+      }
+
+      $messaggi_risposte = $_caregiver->getAllMessaggiRisposte();
+      $logopedisti_salvati = Logopedista::getAllLogopedistiSalvati($_caregiver->__get('id'));
+      return $this->render('contact', [
+        'logopedisti_salvati' => $logopedisti_salvati,
+        'messaggi_risposte' => $messaggi_risposte,
+        'model' => $model
+      ]);
+    }
 
 
 

@@ -11,7 +11,7 @@ use Exception;
 /**
  * 
  */
-class ModifylogopedistaForm extends Model implements ModifyAccountInterface
+class ModifyLogopedistaForm extends Model implements ModifyAccountInterface
 {
     private $_logopedista = null;
 
@@ -47,20 +47,17 @@ class ModifylogopedistaForm extends Model implements ModifyAccountInterface
     public function rules()
     {
         return [
-            // username and password are both required
             [
               ['nome', 'cognome', 'data_nascita'], 
               'required',
               'message' => '{attribute} non può essere vuoto'
             ],
-            //check firstname and lastname length
             [
               ['nome', 'cognome'], 
               'string', 
               'max' => 63,
               'tooLong' => '{attribute} è troppo lungo'
             ],
-            //validate the date of birth
             [
               'data_nascita', 
               'date', 
@@ -68,6 +65,10 @@ class ModifylogopedistaForm extends Model implements ModifyAccountInterface
               'message' => 'Formato non valido'
             ],
         ];
+    }
+
+    public function differencesBetweenData($request_data) {
+      
     }
   
 

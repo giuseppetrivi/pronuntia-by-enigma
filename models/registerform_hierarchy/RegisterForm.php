@@ -44,31 +44,26 @@ abstract class RegisterForm extends Model
     public function rules()
     {
         return [
-            // username and password are both required
             [
               ['email', 'password', 'type', 'firstname', 'lastname', 'date_birth'], 
               'required',
               'message' => '{attribute} non può essere vuoto'
             ],
-            //format and check email
             ['email', 'trim'],
             ['email', 'email', 'message' => '{attribute} non valido'],
             ['email', 'validateEmail', 'skipOnEmpty' => false, 'skipOnError' => false],
-            // password is validated by validatePassword()
             [
               'password', 
               'string', 
               'max' => 127,
               'tooLong' => '{attribute} è troppo lunga'
             ],
-            //check firstname and lastname length
             [
               ['firstname', 'lastname'], 
               'string', 
               'max' => 63,
               'tooLong' => '{attribute} è troppo lungo'
             ],
-            //validate the date of birth
             [
               'date_birth', 
               'date', 

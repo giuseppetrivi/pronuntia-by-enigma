@@ -80,7 +80,7 @@ class NavBarOptionsHandler {
     return Nav::widget([
       'options' => ['class' => 'navbar-nav'],
       'items' => [
-          ['label' => 'XXXX', 'url' => ['/site/index']],
+          ['label' => 'Contatta', 'url' => ['/caregiver/contact']],
           ['label' => 'Logopedisti', 'url' => ['/caregiver/logopedisti']],
           ['label' => 'Utenti', 'url' => ['/caregiver/utenti']],
           ['label' => 'Account', 'url' => ['/caregiver/account']],

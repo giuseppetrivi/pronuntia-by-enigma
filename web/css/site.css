@@ -82,3 +82,17 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+
+/* pulsanti per aggiungere/rimuovere dai salvati il logopedista */
+.add-log {
+    color: #6c757d;
+    border-color: #6c757d
+}
+.remove-log {
+    color: #dc3545;
+    border-color: #dc3545
+}
+.remove-log:hover {
+    color: #bb313e
+}

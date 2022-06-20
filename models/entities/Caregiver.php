@@ -14,7 +14,6 @@ class Caregiver extends ActiveRecord {
     return '{{'.self::$tableName.'}}';
   }
 
-
   /**
    * {@inheritdoc}
    */
@@ -85,7 +84,7 @@ class Caregiver extends ActiveRecord {
    */
   public function saveNewUtente($new_data) {
     $id = $this->__get('id');
-    $sql = "INSERT utenti (caregiver_id, nome, cognome, data_nascita, peso, sesso)
+    $sql = "INSERT INTO utenti (caregiver_id, nome, cognome, data_nascita, peso, sesso)
       VALUES (:idCar, :nome, :cognome, :dataNascita, :peso, :sesso)";
     return Yii::$app->db->createCommand($sql)
       ->bindParam(':nome', $new_data['nome'])
@@ -113,6 +112,65 @@ class Caregiver extends ActiveRecord {
       ->execute();
   }
 
+
+  /**
+   * 
+   */
+  public function addLogopedistaSalvato($idLogopedista) {
+    $id = $this->__get('id');
+    $sql = "INSERT INTO logopedistisalvati(caregiver_id, logopedista_id)
+      VALUES (:idCar, :idLog)";
+    return Yii::$app->db->createCommand($sql)
+      ->bindParam(':idCar', $id)
+      ->bindParam(':idLog', $idLogopedista)
+      ->execute();
+  }
+  public function removeLogopedistaSalvato($idLogopedista) {
+    $id = $this->__get('id');
+    $sql = "DELETE FROM logopedistisalvati
+      WHERE logopedista_id=:idLog AND caregiver_id=:idCar";
+    return Yii::$app->db->createCommand($sql)
+      ->bindParam(':idCar', $id)
+      ->bindParam(':idLog', $idLogopedista)
+      ->execute();
+  }
+
+
+  /**
+   * Gets all the messaggi and the associate risposte (if exists)
+   */
+  public function getAllMessaggiRisposte() {
+    $id = $this->__get('id');
+    $sql = "SELECT m.id, m.titolo, m.contenuto as mcon, m.data_ora as mdo, r.contenuto as rcon, 
+        r.data_ora as rdo, l.nome, l.cognome
+      FROM logopedisti as l JOIN messaggi as m ON l.id=m.logopedista_id 
+        JOIN caregiver as c ON c.id=m.caregiver_id
+        LEFT JOIN risposte as r ON m.id=r.messaggio_id
+      WHERE c.id=:idCar
+      ORDER BY rdo, mdo DESC";
+    
+    return Yii::$app->db->createCommand($sql)
+      ->bindParam(':idCar', $id)
+      ->queryAll();
+  }
+
+  /**
+   * Set the messaggio in the database
+   */
+  public function setMessaggio($attributes) {
+    $idCaregiver = $this->__get('id');
+    $idLogopedista = $attributes['logopedista'];
+    $titolo = $attributes['titolo'];
+    $contenuto = $attributes['contenuto'];
+    $sql = "INSERT INTO messaggi (caregiver_id, logopedista_id, titolo, contenuto) 
+      VALUES (:idCar, :idLog, :titolo, :contenuto)";
+    return Yii::$app->db->createCommand($sql)
+      ->bindParam(':idCar', $idCaregiver)
+      ->bindParam(':idLog', $idLogopedista)
+      ->bindParam(':titolo', $titolo)
+      ->bindParam(':contenuto', $contenuto)
+      ->execute();
+  }
 
 
 }

@@ -37,18 +37,14 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            // username and password are both required
             [
                 ['email', 'password'], 
                 'required',
                 'message' => '{attribute} non può essere vuoto'
             ],
-            //format and check email
             ['email', 'trim'],
             ['email', 'email', 'message' => '{attribute} non valido'],
-            // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
             ['password', 'validatePassword'],
         ];
     }
