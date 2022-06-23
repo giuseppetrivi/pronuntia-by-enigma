@@ -70,7 +70,7 @@ class ContactForm extends Model
      */
     public function sendMessaggio() {
       $attributes = $this->getAttributes();
-      return $this->_caregiver->setMessaggio($attributes);
+      return $this->_caregiver->get_chat()->setMessaggio($attributes);
     }
 
 }

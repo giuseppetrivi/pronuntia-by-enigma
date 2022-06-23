@@ -14,7 +14,7 @@ use app\models\role_factory_method\RoleCreator;
 use Exception;
 
 use app\models\entities\Logopedista;
-
+use app\models\entities\LogopedistiSalvati;
 
 class CaregiverController extends Controller
 {
@@ -79,7 +79,7 @@ class CaregiverController extends Controller
      */
     public function actionUtenti() {
       $_caregiver = $this->getEntityInstance();
-      $all_utenti = $_caregiver->getAllUtentiOfCaregiver();
+      $all_utenti = $_caregiver->get_utenti()->getAllUtentiOfCaregiver();
       return $this->render('utenti', [
         'all_utenti' => $all_utenti
       ]);
@@ -167,7 +167,7 @@ class CaregiverController extends Controller
      */
     public function actionLogopedisti() {
       $_caregiver = $this->getEntityInstance();
-      $logopedisti_salvati = Logopedista::getAllLogopedistiSalvati($_caregiver->__get('id'));
+      $logopedisti_salvati = LogopedistiSalvati::getAllLogopedistiSalvatiByCaregiver($_caregiver->__get('id'));
       return $this->render('logopedisti-salvati', [
         'logopedisti_salvati' => $logopedisti_salvati
       ]);
@@ -202,8 +202,8 @@ class CaregiverController extends Controller
         $saved = $array_requests['saved'];
 
         $save_success = $saved==1 ? 
-          $_caregiver->removeLogopedistaSalvato($idLogopedista) :
-          $_caregiver->addLogopedistaSalvato($idLogopedista);
+          $_caregiver->get_logopedistisalvati()->removeLogopedistaSalvato($idLogopedista) :
+          $_caregiver->get_logopedistisalvati()->addLogopedistaSalvato($idLogopedista);
 
         if (!$save_success) {
           $error_message = 'Qualcosa è andato storto. Riprova';
@@ -226,8 +226,8 @@ class CaregiverController extends Controller
         }
       }
 
-      $messaggi_risposte = $_caregiver->getAllMessaggiRisposte();
-      $logopedisti_salvati = Logopedista::getAllLogopedistiSalvati($_caregiver->__get('id'));
+      $messaggi_risposte = $_caregiver->get_chat()->getAllMessaggiRisposte();
+      $logopedisti_salvati = LogopedistiSalvati::getAllLogopedistiSalvatiByCaregiver($_caregiver->__get('id'));
       return $this->render('contact', [
         'logopedisti_salvati' => $logopedisti_salvati,
         'messaggi_risposte' => $messaggi_risposte,
@@ -244,13 +244,9 @@ class CaregiverController extends Controller
      * @throws Exception
      */
     private function getEntityInstance() {
-        $_roleHandler = RoleCreator::getInstance(Yii::$app->user->identity->tipo);
-        if (!$_roleHandler) {
-            throw new Exception("Error in the role handler");
-        }
-        $_entityInstance = $_roleHandler->getEntityInstance(Yii::$app->user->identity->email);
-        return $_entityInstance;
-    }
+      return ActionRulesHandler::getEntityInstance();
+   }
+
 
 
     /**

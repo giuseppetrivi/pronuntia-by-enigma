@@ -88,7 +88,7 @@ class UtenteForm extends Model
      * Set the attributes with the value of the data in caregiver instance
      */
     public function setDefaultDataInModel($idUtente) {
-      $utente_info = $this->_caregiver->getUtenteInfoById($idUtente);
+      $utente_info = $this->_caregiver->get_utenti()->getUtenteInfoById($idUtente);
 
       if (count($utente_info)===0) {
         throw new Exception();
@@ -106,12 +106,12 @@ class UtenteForm extends Model
      */
     public function saveNewData() {
       $new_data = $this->getAttributes();
-      return $this->_caregiver->saveNewUtente($new_data);
+      return $this->_caregiver->get_utenti()->saveNewUtente($new_data);
     }
     public function saveModifyData($idUtente) {
       $modified_data = $this->getAttributes();
       $modified_data['id'] = $idUtente;
-      return $this->_caregiver->saveModificationsUtente($modified_data);
+      return $this->_caregiver->get_utenti()->saveModificationsUtente($modified_data);
     }
 
 }

@@ -105,7 +105,7 @@ class ModifyCaregiverForm extends Model implements ModifyAccountInterface
       $modified_data = $this->getAttributes([
         'nome', 'cognome', 'data_nascita', 'num_telefono'
       ]);
-      return $this->_caregiver->saveModification($modified_data);
+      return $this->_caregiver->get_utenti()->saveModification($modified_data);
     }
 
 }

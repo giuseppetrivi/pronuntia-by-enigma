@@ -17,6 +17,10 @@ class RoleModeratore extends RoleProductInterface {
     return 'moderatore/logopedisti-list';    
   }
 
+  public function getRegisterModelInstance() {
+    return null;
+  }
+
   
 }
 

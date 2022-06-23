@@ -7,7 +7,7 @@ use Yii;
 use yii\helpers\Html;
 use Exception;
 
-class Chat extends \yii\bootstrap4\Widget
+class ChatWidget extends \yii\bootstrap4\Widget
 {
   public $attore;
 

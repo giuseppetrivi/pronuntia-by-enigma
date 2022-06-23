@@ -21,7 +21,7 @@ $config = [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\Account',
+            'identityClass' => 'app\models\entities\Account',
             'enableAutoLogin' => true,
             'enableSession' => true,
         ],

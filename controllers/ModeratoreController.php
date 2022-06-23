@@ -105,12 +105,7 @@ class ModeratoreController extends Controller
      * @throws Exception
      */
     private function getEntityInstance() {
-        $_roleHandler = RoleCreator::getInstance(Yii::$app->user->identity->tipo);
-        if (!$_roleHandler) {
-            throw new Exception("Error in the role handler");
-        }
-        $_entityInstance = $_roleHandler->getEntityInstance(Yii::$app->user->identity->email);
-        return $_entityInstance;
+       return ActionRulesHandler::getEntityInstance();
     }
 
 

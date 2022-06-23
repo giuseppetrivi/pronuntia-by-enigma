@@ -151,18 +151,14 @@ class SiteController extends Controller
             return $this->redirect([$homePage]);
         }
 
-        //si potrebbe nascondere con un factory method apposito
-        $model = new RegisterLogopedistaForm();
-        switch ($type) {
-            case 'LOG':
-                $model = new RegisterLogopedistaForm();
-                break;
-            case 'CAR': 
-                $model = new RegisterCaregiverForm();
-                break;
-            default: 
-                //return $this->redirect(['site/index']);
-                break;
+        $model = null;
+        $_roleHandler = RoleCreator::getInstance($type);
+        if ($_roleHandler) {
+            $model = $_roleHandler->getRegisterModelInstance();
+        }
+
+        if ($model==null) {
+            return $this->redirect(['site/index']);
         }
 
         if ($model->load(Yii::$app->request->post())) {

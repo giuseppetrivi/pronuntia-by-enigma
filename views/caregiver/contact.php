@@ -2,7 +2,7 @@
 
 use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
-use app\widgets\Chat;
+use app\widgets\ChatWidget;
 
 $this->title = 'Contatta un logopedista';
 $this->params['breadcrumbs'][] = $this->title;
@@ -29,8 +29,6 @@ $attore = 'caregiver';
     <div class="tab-pane fade show active" id="chat" role="tabpanel" aria-labelledby="chat-tab">
       <br>
 
-      <div class="row">
-
       <?php
         
         if (count($messaggi_risposte)==0) {
@@ -39,8 +37,9 @@ $attore = 'caregiver';
           </div>';
         }
         else {
+          echo '<div class="row">';
           foreach ($messaggi_risposte as $value) {
-            echo Chat::widget([
+            echo ChatWidget::widget([
               'attore' => $attore,
               'nomeLog' => $value['nome'],
               'cognomeLog' => $value['cognome'],
@@ -52,11 +51,10 @@ $attore = 'caregiver';
               'r_data_ora' => $value['rdo']
             ]);
           }
+          echo '</div>';
         }
 
       ?>
-
-      </div>
 
     </div>
 

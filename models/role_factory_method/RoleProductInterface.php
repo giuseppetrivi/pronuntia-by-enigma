@@ -46,6 +46,8 @@ abstract class RoleProductInterface {
 
   abstract public function getRoleHomePage();
 
+  abstract public function getRegisterModelInstance();
+
 }
 
 ?>

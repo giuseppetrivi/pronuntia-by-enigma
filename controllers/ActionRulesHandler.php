@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\role_factory_method\RoleCreator;
-
+use Exception;
 
 /**
  * Class to check the controller rule, if has the permission for 
@@ -32,6 +32,15 @@ class ActionRulesHandler {
     }
 
     return $homePage;
+  }
+
+  public static function getEntityInstance() {
+    $_roleHandler = RoleCreator::getInstance(Yii::$app->user->identity->tipo);
+    if (!$_roleHandler) {
+        throw new Exception("Error in the role handler");
+    }
+    $_entityInstance = $_roleHandler->getEntityInstance(Yii::$app->user->identity->email);
+    return $_entityInstance;
   }
 
 }

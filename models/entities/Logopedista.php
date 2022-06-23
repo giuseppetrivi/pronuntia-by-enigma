@@ -22,7 +22,7 @@ class Logopedista extends ActiveRecord {
   }
 
   /**
-   * 
+   * Find all logopedisti by searchkey
    */
   public static function findAllLogopedisti($searchkey) {
     $sql = "SELECT id, nome, cognome, account_email, bio , caregiver_id AS salvato
@@ -34,18 +34,6 @@ class Logopedista extends ActiveRecord {
     return Yii::$app->db->createCommand($sql)
       ->bindParam(':cognome', $cognome)
       ->bindParam(':nome', $nome)
-      ->queryAll();
-  }
-
-  /**
-   * 
-   */
-  public static function getAllLogopedistiSalvati($idCaregiver) {
-    $sql = "SELECT id, nome, cognome, account_email, bio , caregiver_id AS salvato
-      FROM logopedistisalvati, logopedisti 
-      WHERE caregiver_id=:idCar AND id=logopedista_id";
-    return Yii::$app->db->createCommand($sql)
-      ->bindParam(':idCar', $idCaregiver)
       ->queryAll();
   }
 

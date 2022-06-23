@@ -3,7 +3,7 @@
 namespace app\models\role_factory_method;
 
 use app\models\entities\Logopedista;
-
+use app\models\registerform_hierarchy\RegisterLogopedistaForm;
 
 class RoleLogopedista extends RoleProductInterface {
 
@@ -16,6 +16,10 @@ class RoleLogopedista extends RoleProductInterface {
 
   public function getRoleHomePage() {
     return 'site/index';    
+  }
+
+  public function getRegisterModelInstance() {
+    return new RegisterLogopedistaForm();
   }
 
 }
