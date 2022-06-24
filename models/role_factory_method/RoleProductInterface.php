@@ -48,6 +48,9 @@ abstract class RoleProductInterface {
 
   abstract public function getRegisterModelInstance();
 
+  abstract public function getModifyAccountInstance($_roleInstance);
+  abstract public function getModifyPage();
+
 }
 
 ?>

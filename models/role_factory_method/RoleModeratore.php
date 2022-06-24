@@ -21,6 +21,13 @@ class RoleModeratore extends RoleProductInterface {
     return null;
   }
 
+  public function getModifyAccountInstance($_roleInstance) {
+    return null;
+  }
+  public function getModifyPage() {
+    return '';
+  }
+
   
 }
 

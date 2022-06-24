@@ -29,7 +29,7 @@ class Caregiver extends ActiveRecord {
   /**
    * Get all caregiver informations stored in database
    */
-  public function getCaregiverInfo() {
+  public function getRoleAccountInfo() {
     $id = $this->__get('id');
     $sql = "SELECT * FROM caregiver WHERE id=:idCar LIMIT 1";
     $caregiver_info = Yii::$app->db->createCommand($sql)

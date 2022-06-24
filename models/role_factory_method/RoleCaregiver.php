@@ -3,6 +3,7 @@
 namespace app\models\role_factory_method;
 
 use app\models\entities\Caregiver;
+use app\models\modifyaccountform\ModifyCaregiverForm;
 use app\models\registerform_hierarchy\RegisterCaregiverForm;
 
 class RoleCaregiver extends RoleProductInterface {
@@ -19,6 +20,13 @@ class RoleCaregiver extends RoleProductInterface {
 
   public function getRegisterModelInstance() {
     return new RegisterCaregiverForm();
+  }
+
+  public function getModifyAccountInstance($_roleInstance) {
+    return new ModifyCaregiverForm($_roleInstance);
+  }
+  public function getModifyPage() {
+    return 'modify-account-caregiver';
   }
 }
 

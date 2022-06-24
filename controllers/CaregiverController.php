@@ -18,60 +18,8 @@ use app\models\entities\LogopedistiSalvati;
 
 class CaregiverController extends Controller
 {
-    public $defaultAction = 'account';
+    public $defaultAction = 'logopedisti';
     private $controllerRole = 'CAR';
-
-
-    /**
-     * Show account informations
-     */
-    public function actionAccount() {
-      $_caregiver = $this->getEntityInstance();
-      $caregiver_info = $_caregiver->getCaregiverInfo();
-      return $this->render('account', [
-        'caregiver_info' => $caregiver_info
-      ]);
-    }
-
-    /**
-     * Show and set the form to modify the account informations
-     */
-    public function actionModifyAccount() {
-      $_caregiver = $this->getEntityInstance();
-      $model = new ModifyCaregiverForm($_caregiver);
-
-      return $this->render('modify-account', [
-        'model' => $model
-      ]);
-    }
-    /**
-     * Save the modifications on the account informations
-     */
-    public function actionSaveAccount() {
-      $_caregiver = $this->getEntityInstance();
-      $model = new ModifyCaregiverForm($_caregiver);
-
-      $request_data = Yii::$app->request->post();
-
-      if (!$model->differencesBetweenData($request_data['ModifyCaregiverForm'])) {
-        return $this->redirect(['caregiver/account']);
-      }
-
-      if ($model->load($request_data)) {
-        if ($model->saveData()) {
-          $success_message = 'Modifica effettuata con successo';
-          Yii::$app->session->setFlash('success', $success_message);
-          return $this->redirect(['caregiver/account']);
-        }
-        else {
-          $error_message = 'Qualcosa è andato storto nella modifica dei dati. Riprova';
-          Yii::$app->session->setFlash('error', $error_message);
-          return $this->redirect(['caregiver/modify-account']);
-        }
-      }
-
-      return $this->redirect(['caregiver/account']);
-    }
 
 
     /**

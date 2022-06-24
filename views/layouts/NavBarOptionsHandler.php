@@ -83,7 +83,7 @@ class NavBarOptionsHandler {
           ['label' => 'Contatta', 'url' => ['/caregiver/contact']],
           ['label' => 'Logopedisti', 'url' => ['/caregiver/logopedisti']],
           ['label' => 'Utenti', 'url' => ['/caregiver/utenti']],
-          ['label' => 'Account', 'url' => ['/caregiver/account']],
+          ['label' => 'Account', 'url' => ['/site/account']],
           (
             '<li>'
             . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])

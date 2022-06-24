@@ -8,7 +8,7 @@ use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
 
 $this->title = 'Modifica account';
-$this->params['breadcrumbs'][] = ['label' => 'Account', 'url' => ['caregiver/account']];
+$this->params['breadcrumbs'][] = ['label' => 'Account', 'url' => ['site/account']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="modify-account">
@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $form = ActiveForm::begin([
         'id' => 'modify-caregiver-form',
-        'action' => ['caregiver/save-account'],
+        'action' => ['site/save-account'],
         'method' => 'post',
         'layout' => 'horizontal',
         'fieldConfig' => [

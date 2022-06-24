@@ -3,6 +3,7 @@
 namespace app\models\role_factory_method;
 
 use app\models\entities\Logopedista;
+use app\models\modifyaccountform\ModifyLogopedistaForm;
 use app\models\registerform_hierarchy\RegisterLogopedistaForm;
 
 class RoleLogopedista extends RoleProductInterface {
@@ -20,6 +21,13 @@ class RoleLogopedista extends RoleProductInterface {
 
   public function getRegisterModelInstance() {
     return new RegisterLogopedistaForm();
+  }
+
+  public function getModifyAccountInstance($_roleInstance) {
+    return new ModifyLogopedistaForm($_roleInstance);
+  }
+  public function getModifyPage() {
+    return 'modify-account-logopedista';
   }
 
 }

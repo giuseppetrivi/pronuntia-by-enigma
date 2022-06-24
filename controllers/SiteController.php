@@ -178,6 +178,80 @@ class SiteController extends Controller
     }
 
 
+    private function checkType() {
+        if (!Yii::$app->user->isGuest) {
+            return Yii::$app->user->identity->tipo;
+        }
+        return false;
+    }
+    /**
+     * Show account informations
+     */
+    public function actionAccount() {
+        $type = $this->checkType();
+        if ($type=='LOG' || $type=='CAR') {
+            $_roleHandler = RoleCreator::getInstance($type);
+            $_roleInstance = $_roleHandler->getEntityInstance(Yii::$app->user->identity->email);
+            $role_info = $_roleInstance->getRoleAccountInfo();
+            return $this->render('account', [
+                'role_info' => $role_info,
+                'type' => $type
+            ]);
+        }
+        return $this->redirect(['site/index']);
+    }
+
+    /**
+     * Show and set the form to modify the account informations
+     */
+    public function actionModifyAccount() {
+        $type = $this->checkType();
+        if ($type=='LOG' || $type=='CAR') {
+            $_roleHandler = RoleCreator::getInstance($type);
+            $_roleInstance = $_roleHandler->getEntityInstance(Yii::$app->user->identity->email);
+            $model = $_roleHandler->getModifyAccountInstance($_roleInstance);
+            $pageToRender = $_roleHandler->getModifyPage();
+            return $this->render($pageToRender, [
+                'model' => $model
+            ]);
+        }
+        return $this->redirect(['site/index']);
+    }
+    /**
+     * Save the modifications on the account informations
+     */
+    public function actionSaveAccount() {
+        $type = $this->checkType();
+        if ($type=='LOG' || $type=='CAR') {
+            $_roleHandler = RoleCreator::getInstance($type);
+            $_roleInstance = $_roleHandler->getEntityInstance(Yii::$app->user->identity->email);
+            $model = $_roleHandler->getModifyAccountInstance($_roleInstance);
+            $pageToRender = $_roleHandler->getModifyPage();
+
+            $request_data = Yii::$app->request->post();
+
+            if (!$model->differencesBetweenData($request_data['ModifyCaregiverForm'])) {
+                return $this->redirect(['site/account']);
+            }
+
+            if ($model->load($request_data)) {
+                if ($model->saveData()) {
+                    $success_message = 'Modifica effettuata con successo';
+                    Yii::$app->session->setFlash('success', $success_message);
+                    return $this->redirect(['site/account']);
+                }
+                else {
+                    $error_message = 'Qualcosa è andato storto nella modifica dei dati. Riprova';
+                    Yii::$app->session->setFlash('error', $error_message);
+                    return $this->redirect(['site/'.$pageToRender]);
+                }
+            }
+
+            return $this->redirect(['site/account']);
+        }
+        return $this->redirect(['site/index']);        
+    }
+
 
     /**
      * {@inheritdoc}

@@ -86,7 +86,7 @@ class ModifyCaregiverForm extends Model implements ModifyAccountInterface
      * Set the attributes with the value of the data in caregiver instance
      */
     private function setDefaultDataInModel() {
-      $caregiver_info = $this->_caregiver->getCaregiverInfo();
+      $caregiver_info = $this->_caregiver->getRoleAccountInfo();
 
       if (count($caregiver_info)===0) {
         throw new Exception();
@@ -105,7 +105,7 @@ class ModifyCaregiverForm extends Model implements ModifyAccountInterface
       $modified_data = $this->getAttributes([
         'nome', 'cognome', 'data_nascita', 'num_telefono'
       ]);
-      return $this->_caregiver->get_utenti()->saveModification($modified_data);
+      return $this->_caregiver->saveModification($modified_data);
     }
 
 }
