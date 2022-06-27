@@ -2,11 +2,14 @@
 
 namespace app\models\entities;
 
+//use app\models\modifyaccount_hierarchy\ModifyEntitiesInterface;
+
+use app\models\modifyaccount_hierarchy\ModifyEntitiesInterface;
 use Yii;
 use yii\db\ActiveRecord;
 use PDO;
 
-class Caregiver extends ActiveRecord {
+class Caregiver extends ActiveRecord implements ModifyEntitiesInterface {
 
   private static $tableName = 'caregiver';
 
@@ -32,10 +35,9 @@ class Caregiver extends ActiveRecord {
   public function getRoleAccountInfo() {
     $id = $this->__get('id');
     $sql = "SELECT * FROM caregiver WHERE id=:idCar LIMIT 1";
-    $caregiver_info = Yii::$app->db->createCommand($sql)
+    return Yii::$app->db->createCommand($sql)
       ->bindParam(':idCar', $id)
       ->queryOne();
-    return $caregiver_info;
   }
 
   /**
@@ -54,6 +56,7 @@ class Caregiver extends ActiveRecord {
       ->bindParam(':idCar', $id)
       ->execute();
   }
+  
 
   /**
    * Return (and create) an instance of class Utenti to handle utenti

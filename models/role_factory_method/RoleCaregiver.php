@@ -3,7 +3,7 @@
 namespace app\models\role_factory_method;
 
 use app\models\entities\Caregiver;
-use app\models\modifyaccountform\ModifyCaregiverForm;
+use app\models\modifyaccount_hierarchy\ModifyCaregiverForm;
 use app\models\registerform_hierarchy\RegisterCaregiverForm;
 
 class RoleCaregiver extends RoleProductInterface {
@@ -15,7 +15,7 @@ class RoleCaregiver extends RoleProductInterface {
   }
 
   public function getRoleHomePage() {
-    return 'caregiver/account';    
+    return 'caregiver/logopedisti';    
   }
 
   public function getRegisterModelInstance() {

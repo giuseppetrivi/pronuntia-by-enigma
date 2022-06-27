@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $form = ActiveForm::begin([
         'id' => 'modify-caregiver-form',
-        'action' => ['site/save-account'],
+        'action' => ['site/modify-account'],
         'method' => 'post',
         'layout' => 'horizontal',
         'fieldConfig' => [

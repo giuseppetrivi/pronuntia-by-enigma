@@ -3,7 +3,7 @@
 namespace app\models\role_factory_method;
 
 use app\models\entities\Logopedista;
-use app\models\modifyaccountform\ModifyLogopedistaForm;
+use app\models\modifyaccount_hierarchy\ModifyLogopedistaForm;
 use app\models\registerform_hierarchy\RegisterLogopedistaForm;
 
 class RoleLogopedista extends RoleProductInterface {

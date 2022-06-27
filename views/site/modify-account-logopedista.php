@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $form = ActiveForm::begin([
         'id' => 'modify-logopedista-form',
-        'action' => ['site/save-account'],
+        'action' => ['site/modify-account'],
         'method' => 'post',
         'layout' => 'horizontal',
         'fieldConfig' => [
@@ -35,7 +35,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= $form->field($model, 'data_nascita')->input('date') ?>
 
-        <?= $form->field($model, 'num_telefono')->input('number') ?>
+        <?= $form->field($model, 'altre_info')->textarea([
+            'row' => '6'
+        ]) ?>
 
         <div class="form-group">
             <div class="offset-lg-1 col-lg-11">
