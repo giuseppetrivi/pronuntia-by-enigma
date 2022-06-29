@@ -18,8 +18,15 @@ class Logopedista extends ActiveRecord implements ModifyEntitiesInterface {
   /**
    * {@inheritdoc}
    */
-  public static function findIdentity($id) {
-    return static::findOne(['account_email' => $id]);
+  public static function findIdentity($email) {
+    return static::findOne(['account_email' => $email]);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function findById($id) {
+    return static::findOne(['id' => $id]);
   }
   
 

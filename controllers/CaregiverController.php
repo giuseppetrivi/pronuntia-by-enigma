@@ -8,6 +8,7 @@ use app\controllers\ActionRulesHandler;
 
 use app\models\UtenteForm;
 use app\models\ContactForm;
+use app\models\AppointmentForm;
 
 use Exception;
 
@@ -179,6 +180,53 @@ class CaregiverController extends Controller
         'messaggi_risposte' => $messaggi_risposte,
         'model' => $model
       ]);
+    }
+
+
+    /**
+     * 
+     */
+    public function actionAppointment() {
+      $_caregiver = $this->getEntityInstance();
+      $appuntamenti = $_caregiver->get_appuntamenti()->getAllAppuntamenti();
+      return $this->render('appointment', [
+        'appuntamenti' => $appuntamenti
+      ]);
+    }
+
+    /**
+     * 
+     */
+    public function actionAppointmentForm() {
+      $_caregiver = $this->getEntityInstance();
+
+      $model = new AppointmentForm($_caregiver);
+
+      if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if ($model->saveAppointment()) {
+          return $this->redirect(['caregiver/appointment']);
+        }
+      }
+
+      $logopedisti_salvati = LogopedistiSalvati::getAllLogopedistiSalvatiByCaregiver($_caregiver->__get('id'));
+      return $this->render('appointment-form', [
+        'model' => $model,
+        'logopedisti_salvati' => $logopedisti_salvati
+      ]);
+    }
+
+    /**
+     * 
+     */
+    public function actionAppointmentCancel() {
+      $_caregiver = $this->getEntityInstance();
+
+      $array_requests = Yii::$app->request->post();
+      if (array_key_exists('idAppuntamento', $array_requests)) {
+        $idAppuntamento = $array_requests['idAppuntamento'];
+        $_caregiver->get_appuntamenti()->cancelAppointment($idAppuntamento);
+      }
+      return $this->redirect(['caregiver/appointment']);
     }
 
 

@@ -2,8 +2,6 @@
 
 namespace app\models\entities;
 
-//use app\models\modifyaccount_hierarchy\ModifyEntitiesInterface;
-
 use app\models\modifyaccount_hierarchy\ModifyEntitiesInterface;
 use Yii;
 use yii\db\ActiveRecord;
@@ -16,6 +14,7 @@ class Caregiver extends ActiveRecord implements ModifyEntitiesInterface {
   private $_utenti = null;
   private $_chat = null;
   private $_logopedistisalvati = null;
+  private $_appuntamenti = null;
 
   public static function tableName() {
     return '{{'.self::$tableName.'}}';
@@ -87,6 +86,16 @@ class Caregiver extends ActiveRecord implements ModifyEntitiesInterface {
       $this->_chat = new Chat($this->__get('id'));
     }
     return $this->_chat;
+  }
+
+  /**
+   * Return (and create) an instance of class AppuntamentiCar to handle utenti
+   */
+  public function get_appuntamenti() {
+    if ($this->_appuntamenti==null) {
+      $this->_appuntamenti = new AppuntamentiCar($this->__get('id'));
+    }
+    return $this->_appuntamenti;
   }
 
 

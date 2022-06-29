@@ -82,6 +82,7 @@ class NavBarOptionsHandler {
       'items' => [
           ['label' => 'Contatta', 'url' => ['/caregiver/contact']],
           ['label' => 'Logopedisti', 'url' => ['/caregiver/logopedisti']],
+          ['label' => 'Appuntamenti', 'url' => ['/caregiver/appointment']],
           ['label' => 'Utenti', 'url' => ['/caregiver/utenti']],
           ['label' => 'Account', 'url' => ['/site/account']],
           (
