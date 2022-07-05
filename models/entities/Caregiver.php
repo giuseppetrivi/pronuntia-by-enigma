@@ -83,7 +83,7 @@ class Caregiver extends ActiveRecord implements ModifyEntitiesInterface {
    */
   public function get_chat() {
     if ($this->_chat==null) {
-      $this->_chat = new Chat($this->__get('id'));
+      $this->_chat = new ChatCar($this->__get('id'));
     }
     return $this->_chat;
   }

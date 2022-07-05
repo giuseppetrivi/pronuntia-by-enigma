@@ -43,6 +43,14 @@ class ActionRulesHandler {
     return $_entityInstance;
   }
 
+  public static function getRoleHandler() {
+    $_roleHandler = RoleCreator::getInstance(Yii::$app->user->identity->tipo);
+    if (!$_roleHandler) {
+      throw new Exception("Error in the role handler");
+    }
+    return $_roleHandler;
+  }
+
 }
 
 ?>

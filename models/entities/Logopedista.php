@@ -10,6 +10,10 @@ class Logopedista extends ActiveRecord implements ModifyEntitiesInterface {
 
   private static $tableName = 'logopedisti';
 
+  private $_chat = null;
+  private $_logopedistisalvati = null;
+  private $_appuntamenti = null;
+
   public static function tableName() {
     return '{{'.self::$tableName.'}}';
   }
@@ -73,6 +77,38 @@ class Logopedista extends ActiveRecord implements ModifyEntitiesInterface {
       ->bindParam(':bio', $modified_data['altre_info'])
       ->bindParam(':idLog', $id)
       ->execute();
+  }
+
+
+  /**
+   * Return (and create) an instance of class LogopedistiSalvati
+   * to handle the logopedisti salvati
+   */
+  public function get_logopedistisalvati() {
+    if ($this->_logopedistisalvati==null) {
+      $this->_logopedistisalvati = new LogopedistiSalvati($this->__get('id'));
+    }
+    return $this->_logopedistisalvati;
+  }
+
+  /**
+   * Return (and create) an instance of class Chat to handle utenti
+   */
+  public function get_chat() {
+    if ($this->_chat==null) {
+      $this->_chat = new ChatLog($this->__get('id'));
+    }
+    return $this->_chat;
+  }
+
+  /**
+   * Return (and create) an instance of class AppuntamentiCar to handle utenti
+   */
+  public function get_appuntamenti() {
+    if ($this->_appuntamenti==null) {
+      $this->_appuntamenti = new AppuntamentiLog($this->__get('id'));
+    }
+    return $this->_appuntamenti;
   }
 
 

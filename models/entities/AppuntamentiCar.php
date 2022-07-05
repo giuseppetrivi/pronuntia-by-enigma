@@ -6,19 +6,10 @@ use Yii;
 use PDO;
 
 
-class AppuntamentiCar {
-  private $idCaregiver;
+class AppuntamentiCar extends Appuntamenti {
 
-  public function __construct($idCaregiver) {
-    $this->idCaregiver = $idCaregiver;
-  }
-
-
-  /**
-   * Get all the appointments of the caregiver
-   */
-  public function getAllAppuntamenti() {
-    $idCaregiver = $this->idCaregiver;
+  public function getAllAppuntamenti($dates=null) {
+    $idCaregiver = $this->idRole;
     $sql = "SELECT a.id, a.data_ora, a.info, l.nome, l.cognome
       FROM appuntamenti as a, logopedisti as l
       WHERE a.logopedista_id=l.id AND a.caregiver_id=:idCar
@@ -47,7 +38,7 @@ class AppuntamentiCar {
    * Save the appointment in the database
    */
   public function saveAppointment($attributes) {
-    $idCaregiver = $this->idCaregiver;
+    $idCaregiver = $this->idRole;
     $idLogopedista = $attributes['logopedista'];
     $info = $attributes['info']=='' ? null : $attributes['info'];
     $data = $attributes['data'];

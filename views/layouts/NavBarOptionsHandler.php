@@ -16,7 +16,7 @@ class NavBarOptionsHandler {
     $userRole = !Yii::$app->user->isGuest ? Yii::$app->user->identity->tipo : null;
     switch ($userRole) {
       case 'LOG':
-        return NavBarOptionsHandler::defaultNavBar();
+        return NavBarOptionsHandler::logopedistaNavBar();
         break;
       case 'CAR':
         return NavBarOptionsHandler::caregiverNavBar();
@@ -84,6 +84,27 @@ class NavBarOptionsHandler {
           ['label' => 'Logopedisti', 'url' => ['/caregiver/logopedisti']],
           ['label' => 'Appuntamenti', 'url' => ['/caregiver/appointment']],
           ['label' => 'Utenti', 'url' => ['/caregiver/utenti']],
+          ['label' => 'Account', 'url' => ['/site/account']],
+          (
+            '<li>'
+            . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
+            . Html::submitButton(
+                'Logout (' . Yii::$app->user->identity->email . ')',
+                ['class' => 'btn btn-link logout']
+            )
+            . Html::endForm()
+            . '</li>'
+          )
+      ],
+    ]);
+  }
+
+  private static function logopedistaNavBar() {
+    return Nav::widget([
+      'options' => ['class' => 'navbar-nav'],
+      'items' => [
+          ['label' => 'Messaggi', 'url' => ['/logopedista/messages']],
+          ['label' => 'Appuntamenti', 'url' => ['/logopedista/appointment']],
           ['label' => 'Account', 'url' => ['/site/account']],
           (
             '<li>'

@@ -34,8 +34,8 @@ abstract class RoleCreator {
           return false;
           break;
       }
-      return self::$instance;
     }
+    return self::$instance;
     //throw new Exception('Errore nei dati passati');
   }
 

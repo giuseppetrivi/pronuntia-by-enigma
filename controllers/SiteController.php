@@ -10,11 +10,7 @@ use yii\filters\VerbFilter;
 
 use app\models\LoginForm;
 
-use app\models\registerform_hierarchy\RegisterLogopedistaForm;
-use app\models\registerform_hierarchy\RegisterCaregiverForm;
-
 use app\controllers\ActionRulesHandler;
-use app\models\role_factory_method\RoleCreator;
 use ReflectionClass;
 
 class SiteController extends Controller
@@ -52,7 +48,7 @@ class SiteController extends Controller
   /**
    * {@inheritdoc}
    */
-  public function actions()
+  public function actions() //si potrebbe togliere
   {
     return [
       'error' => [
@@ -111,9 +107,8 @@ class SiteController extends Controller
   {
     $type = !Yii::$app->user->isGuest ? Yii::$app->user->identity->tipo : null;
     $homePage = 'site/index';
-    $_roleHandler = RoleCreator::getInstance($type);
-    if ($_roleHandler) {
-      $homePage = $_roleHandler->getRoleHomePage();
+    if ($type!=null) {
+      $homePage = $this->getRoleHandler()->getRoleHomePage();
     }
     return $homePage;
   }
@@ -156,11 +151,7 @@ class SiteController extends Controller
       return $this->redirect([$homePage]);
     }
 
-    $model = null;
-    $_roleHandler = RoleCreator::getInstance($type);
-    if ($_roleHandler) {
-      $model = $_roleHandler->getRegisterModelInstance();
-    }
+    $model = $this->getRoleHandler()->getRegisterModelInstance();
 
     if ($model == null) {
       return $this->redirect(['site/index']);
@@ -198,10 +189,7 @@ class SiteController extends Controller
    */
   public function actionAccount() {
     $type = $this->checkType();
-    $email = Yii::$app->user->identity->email;
-
-    $_roleHandler = RoleCreator::getInstance($type);
-    $_roleInstance = $_roleHandler->getEntityInstance($email);
+    $_roleInstance = $this->getEntityInstance();
     $role_info = $_roleInstance->getRoleAccountInfo();
 
     return $this->render('account', [
@@ -215,11 +203,9 @@ class SiteController extends Controller
    * Show and set the form to modify the account informations
    */
   public function actionModifyAccount() {
-    $type = $this->checkType();
-    $email = Yii::$app->user->identity->email;
-    
-    $_roleHandler = RoleCreator::getInstance($type);
-    $_roleInstance = $_roleHandler->getEntityInstance($email);
+    $this->checkType();
+    $_roleInstance = $this->getEntityInstance();
+    $_roleHandler = $this->getRoleHandler();
     $model = $_roleHandler->getModifyAccountInstance($_roleInstance);
     $pageToRender = $_roleHandler->getModifyPage();
 
@@ -253,6 +239,20 @@ class SiteController extends Controller
     ]);
   }
 
+  /**
+   * Get the entity instance based on the role, after check that user exists
+   * 
+   * @return RoleProductInterface
+   * @throws Exception
+   */
+  private function getEntityInstance() {
+    return ActionRulesHandler::getEntityInstance();
+  }
+  private function getRoleHandler() {
+    return ActionRulesHandler::getRoleHandler();
+  }
+
+   
 
   /**
    * {@inheritdoc}

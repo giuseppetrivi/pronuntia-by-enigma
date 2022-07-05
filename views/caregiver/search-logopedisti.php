@@ -1,7 +1,7 @@
 <?php
 
 use yii\bootstrap4\Html;
-use app\views\custom_utility_class\DateHandler;
+use app\widgets\AlertNoInfo;
 use app\widgets\CardLogopedista;
 
 $this->title = 'Cerca un logopedista';
@@ -43,14 +43,14 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
 
       if ($logopedisti_trovati===null) {
-        echo '<div class="col-lg-12 col-md-12 col-sm-12 alert alert-secondary" role="alert">
-          Digita il cognome del logopedista che cerchi nella barra di ricerca
-        </div>';
+        echo AlertNoInfo::widget([
+          'content' => 'Digita nome o cognome del logopedista che cerchi'
+        ]);
       }
       else if (count($logopedisti_trovati)==0) {
-        echo '<div class="col-lg-12 col-md-12 col-sm-12 alert alert-secondary" role="alert">
-          Nessun risultato
-        </div>';
+        echo AlertNoInfo::widget([
+          'content' => 'Nessun risultato...'
+        ]);
       }
       else {
         foreach ($logopedisti_trovati as $value) {

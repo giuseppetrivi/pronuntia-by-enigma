@@ -1,7 +1,7 @@
 <?php
 
 use yii\bootstrap4\Html;
-use app\views\custom_utility_class\DateHandler;
+use app\widgets\AlertNoInfo;
 use app\widgets\CardLogopedista;
 
 $this->title = 'Logopedisti salvati';
@@ -30,9 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
       <?php
 
         if (count($logopedisti_salvati)==0) {
-          echo '<div class="alert alert-secondary" role="alert">
-            Non hai nessun logopedista salvato
-          </div>';
+          echo AlertNoInfo::widget([
+            'content' => 'Non hai nessun logopedista salvato'
+          ]);
         }
         else {
           foreach ($logopedisti_salvati as $value) {

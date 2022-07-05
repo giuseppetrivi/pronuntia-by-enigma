@@ -184,7 +184,7 @@ class CaregiverController extends Controller
 
 
     /**
-     * 
+     * Shows all the appointments
      */
     public function actionAppointment() {
       $_caregiver = $this->getEntityInstance();
@@ -195,7 +195,7 @@ class CaregiverController extends Controller
     }
 
     /**
-     * 
+     * Form to book an appointment
      */
     public function actionAppointmentForm() {
       $_caregiver = $this->getEntityInstance();
@@ -216,7 +216,7 @@ class CaregiverController extends Controller
     }
 
     /**
-     * 
+     * Cancel the booking to an appointment
      */
     public function actionAppointmentCancel() {
       $_caregiver = $this->getEntityInstance();

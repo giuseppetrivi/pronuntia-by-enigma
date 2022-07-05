@@ -1,7 +1,7 @@
 <?php
 
-use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
+use app\widgets\AlertNoInfo;
 use app\widgets\CardAppointment;
 
 $this->title = 'Appuntamenti';
@@ -33,9 +33,9 @@ $attore = 'caregiver';
     <?php
 
       if (count($appuntamenti)==0) {
-        echo '<div class="alert alert-secondary" role="alert">
-          Non c\'è nessun appuntamento prenotato.
-        </div>';
+        echo AlertNoInfo::widget([
+          'content' => 'Non hai prenotato ancora nessun appuntamento'
+        ]);
       }
       else {
         foreach ($appuntamenti as $value) {

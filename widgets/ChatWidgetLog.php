@@ -7,12 +7,10 @@ use Yii;
 use yii\helpers\Html;
 use Exception;
 
-class ChatWidget extends \yii\bootstrap4\Widget
+class ChatWidgetLog extends \yii\bootstrap4\Widget
 {
-  public $attore;
-
-  public $nomeLog;
-  public $cognomeLog;
+  public $nomeCar;
+  public $cognomeCar;
 
   public $id;
   public $titolo;
@@ -27,9 +25,6 @@ class ChatWidget extends \yii\bootstrap4\Widget
    */
   public function init() {
     parent::init();
-    if ($this->attore!='caregiver' && $this->attore!='logopedista') {
-      throw new Exception("Errore nell'attore del widget");
-    }
     $this->m_data_ora = DateHandler::getLiteralDate($this->m_data_ora);
     $this->r_data_ora = $this->r_data_ora!=null ? DateHandler::getLiteralDate($this->r_data_ora) : null;
   }
@@ -39,17 +34,20 @@ class ChatWidget extends \yii\bootstrap4\Widget
    * {@inheritdoc}
    */
   public function run() {
-    if ($this->attore=='caregiver') {
-      echo $this->chatCaregiver();
-    }
-    else if ($this->attore=='logopedista') {
-      echo $this->chatLogopedista();
-    }
-  }
+    $risposta = Html::beginForm(['logopedista/messages-rispondi'], 'post', [
+        'class' => 'mb-2'
+      ]
+    )
+    . Html::input('hidden', 'idMessaggio', $this->id)
+    . Html::textarea('risposta', '', [
+      'class' => 'form-control mb-2',
+      'rows' => '3',
+      'required' => 'true',
+      'max' => '255'
+    ])
+    . Html::submitButton('Rispondi', ['class' => 'btn btn-light'])
+    . Html::endForm();
 
-
-  private function chatCaregiver() {
-    $risposta = '<i>(ancora nessuna risposta)</i>';
     if ($this->r_data_ora!=null) {
       $risposta = '<div class="card">
         <div class="card-header" style="font-size: 12px; padding: 0.5rem 1rem;">
@@ -61,10 +59,10 @@ class ChatWidget extends \yii\bootstrap4\Widget
       </div>';
     }
 
-    return '<div class="col-lg-6 mb-2">
+    echo '<div class="col-lg-6 mb-2">
       <div class="card">
         <div class="card-header">
-          Inviato a <b>'.$this->nomeLog.' '.$this->cognomeLog.'</b> il '.$this->m_data_ora.'
+          Inviato da <b>'.$this->nomeCar.' '.$this->cognomeCar.'</b> il '.$this->m_data_ora.'
         </div>
         <div class="card-body">
           <h5 class="card-title">'.$this->titolo.'</h5>
@@ -73,10 +71,6 @@ class ChatWidget extends \yii\bootstrap4\Widget
         </div>
       </div>
     </div>';
-  }
-
-  private function chatLogopedista() {
-    echo 'ciao';
   }
 
 }

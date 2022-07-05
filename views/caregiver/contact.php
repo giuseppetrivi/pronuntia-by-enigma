@@ -2,7 +2,8 @@
 
 use yii\bootstrap4\ActiveForm;
 use yii\bootstrap4\Html;
-use app\widgets\ChatWidget;
+use app\widgets\AlertNoInfo;
+use app\widgets\ChatWidgetCar;
 
 $this->title = 'Contatta un logopedista';
 $this->params['breadcrumbs'][] = $this->title;
@@ -32,15 +33,14 @@ $attore = 'caregiver';
       <?php
         
         if (count($messaggi_risposte)==0) {
-          echo '<div class="alert alert-secondary" role="alert">
-            Non c\'è nessuna conversazione.
-          </div>';
+          echo AlertNoInfo::widget([
+            'content' => 'Non è presente nessuna domanda'
+          ]);
         }
         else {
           echo '<div class="row">';
           foreach ($messaggi_risposte as $value) {
-            echo ChatWidget::widget([
-              'attore' => $attore,
+            echo ChatWidgetCar::widget([
               'nomeLog' => $value['nome'],
               'cognomeLog' => $value['cognome'],
               'id' => $value['id'],

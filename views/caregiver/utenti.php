@@ -1,6 +1,7 @@
 <?php
 
 use yii\bootstrap4\Html;
+use app\widgets\AlertNoInfo;
 use app\widgets\CardUtente;
 
 $this->title = 'I miei utenti';
@@ -29,9 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
 
       if (count($all_utenti)==0) {
-        echo '<div class="alert alert-secondary" role="alert">
-          Non hai registrato nessun utente.
-        </div>';
+        echo AlertNoInfo::widget([
+          'content' => 'Non hai registrato alcun utente'
+        ]);
       }
       else {
         foreach ($all_utenti as $value) {
