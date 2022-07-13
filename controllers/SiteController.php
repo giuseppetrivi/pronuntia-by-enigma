@@ -22,7 +22,7 @@ class SiteController extends Controller
   /**
    * {@inheritdoc}
    */
-  public function behaviors() //si potrebbe togliere
+  /*public function behaviors() //si potrebbe togliere
   {
     return [
       'access' => [
@@ -43,23 +43,7 @@ class SiteController extends Controller
         ],
       ],
     ];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function actions() //si potrebbe togliere
-  {
-    return [
-      'error' => [
-        'class' => 'yii\web\ErrorAction',
-      ],
-      'captcha' => [
-        'class' => 'yii\captcha\CaptchaAction',
-        'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-      ],
-    ];
-  }
+  }*/
 
 
   /**

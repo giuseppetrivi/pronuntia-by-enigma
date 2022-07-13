@@ -13,6 +13,9 @@ class Logopedista extends ActiveRecord implements ModifyEntitiesInterface {
   private $_chat = null;
   private $_logopedistisalvati = null;
   private $_appuntamenti = null;
+  private $_questionari = null;
+  private $_terapie = null;
+  private $_esercizi = null;
 
   public static function tableName() {
     return '{{'.self::$tableName.'}}';
@@ -40,13 +43,14 @@ class Logopedista extends ActiveRecord implements ModifyEntitiesInterface {
   public static function findAllLogopedisti($searchkey) {
     $sql = "SELECT id, nome, cognome, account_email, bio , caregiver_id AS salvato
       FROM logopedisti LEFT JOIN logopedistisalvati ON id=logopedista_id
-      WHERE cognome LIKE :cognome OR nome LIKE :nome
+      WHERE (cognome LIKE :cognome OR nome LIKE :nome) AND confermato=:conf
       ORDER BY nome ASC";
     $cognome = '%'.$searchkey.'%';
     $nome = '%'.$searchkey.'%';
     return Yii::$app->db->createCommand($sql)
       ->bindParam(':cognome', $cognome)
       ->bindParam(':nome', $nome)
+      ->bindValue(':conf', 1)
       ->queryAll();
   }
 
@@ -86,13 +90,13 @@ class Logopedista extends ActiveRecord implements ModifyEntitiesInterface {
    */
   public function get_logopedistisalvati() {
     if ($this->_logopedistisalvati==null) {
-      $this->_logopedistisalvati = new LogopedistiSalvati($this->__get('id'));
+      $this->_logopedistisalvati = new LogopedistiSalvatiLog($this->__get('id'));
     }
     return $this->_logopedistisalvati;
   }
 
   /**
-   * Return (and create) an instance of class Chat to handle utenti
+   * Return (and create) an instance of class Chat to handle chat
    */
   public function get_chat() {
     if ($this->_chat==null) {
@@ -102,13 +106,43 @@ class Logopedista extends ActiveRecord implements ModifyEntitiesInterface {
   }
 
   /**
-   * Return (and create) an instance of class AppuntamentiCar to handle utenti
+   * Return (and create) an instance of class AppuntamentiCar to handle appuntamenti
    */
   public function get_appuntamenti() {
     if ($this->_appuntamenti==null) {
       $this->_appuntamenti = new AppuntamentiLog($this->__get('id'));
     }
     return $this->_appuntamenti;
+  }
+
+  /**
+   * Return (and create) an instance of class QuestionariLog to handle questionari
+   */
+  public function get_questionari() {
+    if ($this->_questionari==null) {
+      $this->_questionari = new QuestionariLog($this->__get('id'));
+    }
+    return $this->_questionari;
+  }
+
+  /**
+   * Return (and create) an instance of class TerapieLog to handle terapie
+   */
+  public function get_terapie() {
+    if ($this->_terapie==null) {
+      $this->_terapie = new TerapieLog($this->__get('id'));
+    }
+    return $this->_terapie;
+  }
+
+  /**
+   * Return (and create) an instance of class EserciziLog to handle esercizi
+   */
+  public function get_esercizi() {
+    if ($this->_esercizi==null) {
+      $this->_esercizi = new EserciziLog($this->__get('id'));
+    }
+    return $this->_esercizi;
   }
 
 

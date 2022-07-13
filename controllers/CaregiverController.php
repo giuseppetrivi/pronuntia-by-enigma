@@ -9,11 +9,11 @@ use app\controllers\ActionRulesHandler;
 use app\models\UtenteForm;
 use app\models\ContactForm;
 use app\models\AppointmentForm;
+use app\models\questionariform_hierarchy\QuestionarioFormCar;
 
 use Exception;
 
 use app\models\entities\Logopedista;
-use app\models\entities\LogopedistiSalvati;
 
 class CaregiverController extends Controller
 {
@@ -114,7 +114,7 @@ class CaregiverController extends Controller
      */
     public function actionLogopedisti() {
       $_caregiver = $this->getEntityInstance();
-      $logopedisti_salvati = LogopedistiSalvati::getAllLogopedistiSalvatiByCaregiver($_caregiver->__get('id'));
+      $logopedisti_salvati = $_caregiver->get_logopedistisalvati()->getAllLogopedistiSalvati();
       return $this->render('logopedisti-salvati', [
         'logopedisti_salvati' => $logopedisti_salvati
       ]);
@@ -174,7 +174,7 @@ class CaregiverController extends Controller
       }
 
       $messaggi_risposte = $_caregiver->get_chat()->getAllMessaggiRisposte();
-      $logopedisti_salvati = LogopedistiSalvati::getAllLogopedistiSalvatiByCaregiver($_caregiver->__get('id'));
+      $logopedisti_salvati = $_caregiver->get_logopedistisalvati()->getAllLogopedistiSalvati();
       return $this->render('contact', [
         'logopedisti_salvati' => $logopedisti_salvati,
         'messaggi_risposte' => $messaggi_risposte,
@@ -193,7 +193,6 @@ class CaregiverController extends Controller
         'appuntamenti' => $appuntamenti
       ]);
     }
-
     /**
      * Form to book an appointment
      */
@@ -208,13 +207,12 @@ class CaregiverController extends Controller
         }
       }
 
-      $logopedisti_salvati = LogopedistiSalvati::getAllLogopedistiSalvatiByCaregiver($_caregiver->__get('id'));
+      $logopedisti_salvati = $_caregiver->get_logopedistisalvati()->getAllLogopedistiSalvati();
       return $this->render('appointment-form', [
         'model' => $model,
         'logopedisti_salvati' => $logopedisti_salvati
       ]);
     }
-
     /**
      * Cancel the booking to an appointment
      */
@@ -227,6 +225,119 @@ class CaregiverController extends Controller
         $_caregiver->get_appuntamenti()->cancelAppointment($idAppuntamento);
       }
       return $this->redirect(['caregiver/appointment']);
+    }
+
+
+    /**
+     * Shows all the therapies
+     */
+    public function actionTherapy() {
+      $_caregiver = $this->getEntityInstance();
+      $terapie = $_caregiver->get_terapie()->getAllTerapie();
+      return $this->render('therapy', [
+        'terapie' => $terapie
+      ]);
+    }
+    /**
+     * Details of a single therapy
+     */
+    public function actionTherapyDetails(int $idTerapia=null) {
+      if ($idTerapia==null) {
+        return $this->redirect(['caregiver/therapy']);
+      }
+
+      $_caregiver = $this->getEntityInstance();
+
+      $terapia_info = $_caregiver->get_terapie()->getTerapiaInfoById($idTerapia);
+      $logopedista_info = $_caregiver->get_terapie()->getLogopedistaInfoByTerapia($idTerapia);
+      $utente_info = $_caregiver->get_terapie()->getUtenteInfoByTerapia($idTerapia);
+      $questionari_info = $_caregiver->get_terapie()->getQuestionariInfoByTerapia($idTerapia);
+      $esercizi_info = $_caregiver->get_terapie()->getEserciziInfoByTerapia($idTerapia);
+
+      return $this->render('therapy-details', [
+        'terapia_info' => $terapia_info,
+        'logopedista_info' => $logopedista_info,
+        'utente_info' => $utente_info,
+        'questionari_info' => $questionari_info,
+        'esercizi_info' => $esercizi_info
+      ]);
+    }
+
+    /**
+     * Shows the questionnaire with the fields to compile it
+     */
+    public function actionShowQuestionnaire() {
+      $array_requests = Yii::$app->request->post();
+
+      if (array_key_exists('idQuestionarioAssegnato', $array_requests)
+        && array_key_exists('idTerapia', $array_requests)) {
+        $idQuestionarioAssegnato = $array_requests['idQuestionarioAssegnato'];
+        $idTerapia = $array_requests['idTerapia'];
+
+        $_caregiver = $this->getEntityInstance();
+        $questionarioassegnato = $_caregiver->get_questionari()->getQuestionarioAssegnatoInfo($idQuestionarioAssegnato);
+        $idQuestionario = $questionarioassegnato['id'];
+        $questionario_info = $_caregiver->get_questionari()->getQuestionarioById($idQuestionario);
+        
+        return $this->render('show-questionnaire', [
+          'questionario_info' => $questionario_info,
+          'idQuestionarioAssegnato' => $idQuestionarioAssegnato,
+          'idTerapia' => $idTerapia
+        ]);
+      }
+
+      return $this->redirect(['caregiver/therapy']);
+    }
+    /**
+     * Answer to the questionnaire
+     */
+    public function actionAnswerQuestionnaire() {
+      $array_requests = Yii::$app->request->post();
+
+      if (array_key_exists('idQuestionarioAssegnato', $array_requests) 
+       && array_key_exists('num_quesiti', $array_requests)) {
+
+        $idQuestionarioAssegnato = $array_requests['idQuestionarioAssegnato'];
+        unset($array_requests['idQuestionarioAssegnato']);
+        $num_quesiti = $array_requests['num_quesiti'];
+        unset($array_requests['num_quesiti']);
+
+        $array_quesiti = [];
+        foreach ($array_requests as $key => $value) {
+          if ($key=='_csrf') {
+            continue;
+          }
+          $risposta = [
+            'id' => $key,
+            'contenuto' => $value
+          ];
+          array_push($array_quesiti, $risposta);
+        }
+
+        $_caregiver = $this->getEntityInstance();
+        $_questionario = new QuestionarioFormCar($_caregiver, $idQuestionarioAssegnato, $array_quesiti);
+        $_questionario->saveQuestionario();
+      }
+      return $this->redirect(['caregiver/therapy']);
+    }
+
+    /**
+     * 
+     */
+    public function actionEndExercise($idEsercizio=null) {
+      if ($idEsercizio==null) {
+        return $this->redirect(['logopedista/therapy']);
+      }
+
+      $_caregiver = $this->getEntityInstance();
+      $_caregiver->get_esercizi()->endExercise($idEsercizio);
+
+      $terapia_info = $_caregiver->get_esercizi()->getTerapiaInfoByEsercizio($idEsercizio);
+      if ($terapia_info['notifiche']==1) {
+        $email_logopedista = $terapia_info['email'];
+        //email
+      }
+      return $this->redirect(['caregiver/therapy-details?idTerapia='.$terapia_info['ter_id']]);
     }
 
 

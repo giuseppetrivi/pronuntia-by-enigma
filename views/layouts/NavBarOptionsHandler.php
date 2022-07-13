@@ -80,6 +80,7 @@ class NavBarOptionsHandler {
     return Nav::widget([
       'options' => ['class' => 'navbar-nav'],
       'items' => [
+          ['label' => 'Terapie', 'url' => ['/caregiver/therapy']],
           ['label' => 'Contatta', 'url' => ['/caregiver/contact']],
           ['label' => 'Logopedisti', 'url' => ['/caregiver/logopedisti']],
           ['label' => 'Appuntamenti', 'url' => ['/caregiver/appointment']],
@@ -103,7 +104,9 @@ class NavBarOptionsHandler {
     return Nav::widget([
       'options' => ['class' => 'navbar-nav'],
       'items' => [
+          ['label' => 'Terapie', 'url' => ['/logopedista/therapy']],
           ['label' => 'Messaggi', 'url' => ['/logopedista/messages']],
+          ['label' => 'Questionari', 'url' => ['/logopedista/questionnaries']],
           ['label' => 'Appuntamenti', 'url' => ['/logopedista/appointment']],
           ['label' => 'Account', 'url' => ['/site/account']],
           (

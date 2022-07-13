@@ -15,7 +15,7 @@ class RoleCaregiver extends RoleProductInterface {
   }
 
   public function getRoleHomePage() {
-    return 'caregiver/logopedisti';    
+    return 'caregiver/therapy';    
   }
 
   public function getRegisterModelInstance() {

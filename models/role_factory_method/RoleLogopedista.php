@@ -16,7 +16,7 @@ class RoleLogopedista extends RoleProductInterface {
   }
 
   public function getRoleHomePage() {
-    return 'site/index';    
+    return 'logopedista/therapy';    
   }
 
   public function getRegisterModelInstance() {

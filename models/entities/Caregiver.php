@@ -15,6 +15,9 @@ class Caregiver extends ActiveRecord implements ModifyEntitiesInterface {
   private $_chat = null;
   private $_logopedistisalvati = null;
   private $_appuntamenti = null;
+  private $_questionari = null;
+  private $_terapie = null;
+  private $_esercizi = null;
 
   public static function tableName() {
     return '{{'.self::$tableName.'}}';
@@ -73,7 +76,7 @@ class Caregiver extends ActiveRecord implements ModifyEntitiesInterface {
    */
   public function get_logopedistisalvati() {
     if ($this->_logopedistisalvati==null) {
-      $this->_logopedistisalvati = new LogopedistiSalvati($this->__get('id'));
+      $this->_logopedistisalvati = new LogopedistiSalvatiCar($this->__get('id'));
     }
     return $this->_logopedistisalvati;
   }
@@ -96,6 +99,36 @@ class Caregiver extends ActiveRecord implements ModifyEntitiesInterface {
       $this->_appuntamenti = new AppuntamentiCar($this->__get('id'));
     }
     return $this->_appuntamenti;
+  }
+
+  /**
+   * Return (and create) an instance of class QuestionariCar to handle questionari
+   */
+  public function get_questionari() {
+    if ($this->_questionari==null) {
+      $this->_questionari = new QuestionariCar($this->__get('id'));
+    }
+    return $this->_questionari;
+  }
+
+  /**
+   * Return (and create) an instance of class TerapieCar to handle terapie
+   */
+  public function get_terapie() {
+    if ($this->_terapie==null) {
+      $this->_terapie = new TerapieCar($this->__get('id'));
+    }
+    return $this->_terapie;
+  }
+
+  /**
+   * Return (and create) an instance of class EserciziCar to handle esercizi
+   */
+  public function get_esercizi() {
+    if ($this->_esercizi==null) {
+      $this->_esercizi = new EserciziCar($this->__get('id'));
+    }
+    return $this->_esercizi;
   }
 
 
