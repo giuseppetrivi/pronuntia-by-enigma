@@ -131,11 +131,11 @@ class CaregiverController extends Controller
       if (array_key_exists('search', $array_requests)) {
         $searchkey = $array_requests['search'];
         $logopedisti_trovati = Logopedista::findAllLogopedisti($searchkey);
+        return $this->render('search-logopedisti', [
+          'logopedisti_trovati' => $logopedisti_trovati,
+          'searchkey' => $searchkey
+        ]);
       }
-      return $this->render('search-logopedisti', [
-        'logopedisti_trovati' => $logopedisti_trovati,
-        'searchkey' => $searchkey
-      ]);
     }
 
     /**
@@ -335,7 +335,7 @@ class CaregiverController extends Controller
       $terapia_info = $_caregiver->get_esercizi()->getTerapiaInfoByEsercizio($idEsercizio);
       if ($terapia_info['notifiche']==1) {
         $email_logopedista = $terapia_info['email'];
-        //email
+        //invio notifica
       }
       return $this->redirect(['caregiver/therapy-details?idTerapia='.$terapia_info['ter_id']]);
     }

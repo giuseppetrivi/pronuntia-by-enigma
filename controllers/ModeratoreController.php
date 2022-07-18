@@ -40,12 +40,14 @@ class ModeratoreController extends Controller
             Yii::$app->session->setFlash('error', $error_message);
             return $this->redirect(['moderatore/logopedisti-list']);
         }
-        $rejection_info = $_moderatore->getRejectionInfoByLogopedistaId($id);
+        else {
+            $rejection_info = $_moderatore->getRejectionInfoByLogopedistaId($id);
 
-        return $this->render('logopedista-info', [
-            'logopedista_info' => $logopedista_info,
-            'rejection_info' => $rejection_info
-        ]);
+            return $this->render('logopedista-info', [
+                'logopedista_info' => $logopedista_info,
+                'rejection_info' => $rejection_info
+            ]);
+        }
     }
 
 

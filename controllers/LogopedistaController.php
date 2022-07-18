@@ -10,7 +10,6 @@ use app\models\questionariform_hierarchy\QuestionarioFormLog;
 use app\models\AssignQuestionnaireForm;
 use app\models\TherapyForm;
 use Exception;
-use Symfony\Component\Console\Output\NullOutput;
 
 class LogopedistaController extends Controller
 {
