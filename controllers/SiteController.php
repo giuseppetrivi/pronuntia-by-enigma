@@ -135,7 +135,7 @@ class SiteController extends Controller
       return $this->redirect([$homePage]);
     }
 
-    $model = $this->getRoleHandler()->getRegisterModelInstance();
+    $model = $this->getRoleHandlerByType($type)->getRegisterModelInstance();
 
     if ($model == null) {
       return $this->redirect(['site/index']);
@@ -234,6 +234,9 @@ class SiteController extends Controller
   }
   private function getRoleHandler() {
     return ActionRulesHandler::getRoleHandler();
+  }
+  private function getRoleHandlerByType($type) {
+    return ActionRulesHandler::getRoleHandlerByType($type);
   }
 
    

@@ -128,6 +128,7 @@ class CaregiverController extends Controller
       $searchkey = '';
 
       $array_requests = Yii::$app->request->post();
+      $array_requests['search'] = $searchkey;
       if (array_key_exists('search', $array_requests)) {
         $searchkey = $array_requests['search'];
         $logopedisti_trovati = Logopedista::findAllLogopedisti($searchkey);

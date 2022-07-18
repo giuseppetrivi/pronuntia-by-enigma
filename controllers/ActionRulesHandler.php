@@ -51,6 +51,14 @@ class ActionRulesHandler {
     return $_roleHandler;
   }
 
+  public static function getRoleHandlerByType($type) {
+    $_roleHandler = RoleCreator::getInstance($type);
+    if (!$_roleHandler) {
+      throw new Exception("Error in the role handler");
+    }
+    return $_roleHandler;
+  }
+
 }
 
 ?>

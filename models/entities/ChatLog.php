@@ -14,7 +14,7 @@ class ChatLog extends Chat {
         r.data_ora as rdo, c.nome, c.cognome
       FROM logopedisti as l JOIN messaggi as m ON l.id=m.logopedista_id 
         JOIN caregiver as c ON c.id=m.caregiver_id
-        LEFT JOIN risposte as r ON m.id=r.messaggio_id
+        LEFT JOIN rispostemessaggi as r ON m.id=r.messaggio_id
       WHERE l.id=:idLog
       ORDER BY rdo ASC , mdo DESC";
     
@@ -29,7 +29,7 @@ class ChatLog extends Chat {
   public function setRisposta($attributes) {
     $idMessaggio = $attributes['idMessaggio'];
     $contenuto = $attributes['risposta'];
-    $sql = "INSERT INTO risposte (messaggio_id, contenuto) 
+    $sql = "INSERT INTO rispostemessaggi (messaggio_id, contenuto) 
       VALUES (:idMess, :contenuto)";
     return Yii::$app->db->createCommand($sql)
       ->bindParam(':idMess', $idMessaggio)
